@@ -18,18 +18,20 @@ function OfferProduct1(props) {
   const [categoriaProducto, setCategoriaProducto] = useState([]);
   const [tipoProducto, setTipoProducto] = useState([]);
   const [tipoMaterial, setTipoMaterial] = useState([]);
+  const [image, setImage] = useState("");
+  const [url, setUrl] = useState("");
   const [dataProducto, setDataProducto] = useState({
     NombreProducto: '',
     Descripcion: '',
     Imagen: '',
     Localizacion: '',
-    Costoproducto: 0,
+    CostoProducto: 0,
     CostoProductoUnidad: 0,
     Unidades: 0,
-    EnvioGratis: 0,
     IdTipoCategoriaProducto: '',
     IdCategoriaProducto: '',
     IdTipoProducto: '',
+    IdUsuario: ''
   });
   const [dataLocalizacion, setDataLocalizacion] = useState({
     Direccion: '',
@@ -39,9 +41,9 @@ function OfferProduct1(props) {
     IdMunicipio: '',
     IdBarrio: '',
     Telefono: '',
-    TelefonOpt: '',
-    Correo: '',
-    Web: ''
+    TelefonOpc: '',
+    Email: '',
+    WebSite: ''
   });
   const [dataCaracterizacion, setDataCaracterizacion] = useState({
     Marca: '',
@@ -49,6 +51,7 @@ function OfferProduct1(props) {
     Condicion: '',
     Ancho: '',
     Alto: '',
+    EnvioGratis: '',
     IdTipoMaterialProducto: '',
     IdTipoGarantiaProducto: ''
    
@@ -59,9 +62,6 @@ function OfferProduct1(props) {
       .get("https://localhost:44342/product/getCategoryTypeProduct")
       .then(response => {
         setTipoCategoriaProducto(response.data)
-        setTimeout(() => {
-          console.log(tipoCategoriaProducto);
-        }, 3000)
       })
       .catch((error) => {
         console.log(error);
@@ -71,21 +71,15 @@ function OfferProduct1(props) {
       .get("https://localhost:44342/product/getTypeMaterialProduct")
       .then(response => {
         setTipoMaterial(response.data)
-        setTimeout(() => {
-          console.log(tipoMaterial);
-        }, 3000)
       })
       .catch((error) => {
         console.log(error);
       });
 
     axios
-      .get("https://localhost:44342/services/getDepartments")
+      .get("https://localhost:44342/product/getDepartments")
       .then(response => {
         setDepartamentos(response.data)
-        setTimeout(() => {
-          console.log(departamentos);
-        }, 3000)
       })
       .catch((error) => {
         console.log(error);
@@ -100,9 +94,6 @@ function OfferProduct1(props) {
       .get("https://localhost:44342/services/getCities?idDepartamento=" + idDepartamento)
       .then(response => {
         setMunicipios(response.data)
-        setTimeout(() => {
-          console.log(municipios);
-        }, 3000)
       })
       .catch((error) => {
         console.log(error);
@@ -165,39 +156,49 @@ function OfferProduct1(props) {
         console.log(error);
       });
     tipoProductoList = tipoProducto.length > 0
-      && tipoServicio.map((item, i) => {
+      && tipoProducto.map((item, i) => {
         return (
           <option key={i} value={item.idTipoProducto}>{item.nombreTiipoProducto}</option>
         )
       }, this);
   }
   const OfferProducts = (e) => {
-    const infoProduct = {
-      caracterizacion: dataCaracterizacion,
-      localizacion: dataLocalizacion,
-      producto: dataProducto
-    };
-    e.preventDefault();
-    const data = {
-      caracterizacion: dataCaracterizacion,
-      localizacion: dataLocalizacion,
-      producto: dataProducto
-    };
-    const apiUrl = "https://localhost:44342/product/registerProduct";
-    axios.post(apiUrl, data)
-      .then((result) => {
-        debugger;
-        console.log(result.data);
-        const serializedState = JSON.stringify(result.data.UserDetails);
-        var a = localStorage.setItem('OfferProducts', serializedState);
-        console.log("A:", a)
-        const user = result.data.token;
-        console.log(user);
-        if (result.status == 200)
-          window.location.reload(true);
-        else
-          alert('No registrado');
-      })
+    const dataImage = new FormData()
+    dataImage.append("file", image)
+    dataImage.append("upload_preset", "xx3mfqax")
+    dataImage.append("cloud_name", "ddsbfi1l5")
+    fetch("https://api.cloudinary.com/v1_1/ddsbfi1l5/image/upload", {
+      method: "post",
+      body: dataImage
+    }).then(resp => resp.json())
+      .then(data => {
+        setUrl(data.url)
+        dataProducto.Imagen = data.url;
+        var infoUser = JSON.parse(localStorage.getItem('myData'));
+        dataProducto.IdUsuario = infoUser.idUser
+        e.preventDefault();
+        const dataP = {
+          caracterizacion: dataCaracterizacion,
+          localizacion: dataLocalizacion,
+          producto: dataProducto
+        };
+        const apiUrl = "https://localhost:44342/product/registerProduct";
+        axios.post(apiUrl, dataP)
+          .then((result) => {
+            console.log(result.data);
+            const serializedState = JSON.stringify(result.data.UserDetails);
+            var a = localStorage.setItem('OfferProducts', serializedState);
+            console.log("A:", a)
+            const user = result.data.token;
+            console.log(user);
+            if (result.status == 200)
+              window.location.reload(true);
+            else
+              alert('No registrado');
+          })
+
+      }).catch(err => console.log(err))
+    debugger;
   };
 
   const onChange = (e) => {
@@ -252,6 +253,7 @@ function OfferProduct1(props) {
         <option key={i} value={item.idTipoProducto}>{item.nombreTiipoProducto}</option>
       )
     }, this);
+
   return (
     <div className="bg-light min-vh-10 d-flex flex-row align-items-center">
       <CContainer>
@@ -275,8 +277,7 @@ function OfferProduct1(props) {
                   </CInputGroup>
 
                   <CInputGroup className="mb-3">
-                    <CFormInput value={dataProducto.Imagen} onChange={onChange} type="file" name="myImage" accept="image/*" id="Imagen" name="Imagen"/>
-                    <CInputGroupText component="label" htmlFor="Imagen">Subir Fotos</CInputGroupText>
+                    <CFormInput type="file" onChange={(e) => setImage(e.target.files[0])} accept="image/*" id="Imagen" name="Imagen" />
                   </CInputGroup>
 
                   <CAlert color="info">Categoria</CAlert>
@@ -303,7 +304,7 @@ function OfferProduct1(props) {
 
                   <strong>Marca</strong>
                   <CInputGroup className="mb-3">
-                    <CFormInput value={dataProducto.Marca} onChange={onChange} type="text" className="form-control form-control-sm" id="Marca" name="Marca" />
+                    <CFormInput value={dataCaracterizacion.Marca} onChange={onChange} type="text" className="form-control form-control-sm" id="Marca" name="Marca" />
                   </CInputGroup>
 
                   <strong>Condición</strong>
@@ -333,7 +334,7 @@ function OfferProduct1(props) {
                   </CFormSelect>
 
                   <strong>Envio Gratis</strong>
-                  <CFormSelect value={dataProducto.EnvioGratis} onChange={onChange} aria-label="Default select example" name="EnvioGratis" id="EnvioGratis">
+                  <CFormSelect value={dataCaracterizacion.EnvioGratis} onChange={onChange} aria-label="Default select example" name="EnvioGratis" id="EnvioGratis">
                     <option> Seleccione una opción... </option>
                     <option value="Si">Si</option>
                     <option value="No">No</option>
@@ -368,9 +369,7 @@ function OfferProduct1(props) {
                       </CCol>
                   </CInputGroup>
 
-
                   <CAlert color="info">Localización</CAlert>
-
 
                   <strong>Departamento</strong>
                   <CFormSelect value={dataLocalizacion.IdDepartamento} onChange={onChangeDepartamento} aria-label="Default select example" name="IdDepartamento" id="IdDepartamento">
@@ -401,6 +400,13 @@ function OfferProduct1(props) {
                     </CCol>
                   </CRow>
 
+                  <strong>Datos adicionales: </strong>
+                  <CRow className="mb-3">
+                    <CCol sm={10} >
+                      <CFormInput value={dataLocalizacion.DatosAdicionales} onChange={onChange} type="text" className="form-control form-control-sm" name="DatosAdicionales" id="DatosAdicionales" />
+                    </CCol>
+                  </CRow>
+
                   <strong>Telefono Personal:</strong>
                   <CRow className="mb-3">
                     <CCol sm={10} >
@@ -411,21 +417,21 @@ function OfferProduct1(props) {
                   <strong>Telefono Opcional:</strong>
                   <CRow className="mb-3">
                     <CCol sm={10} >
-                      <CFormInput value={dataLocalizacion.TelefonoOpt} onChange={onChange} type="number" className="form-control form-control-sm" name="Telefono Opt" id="Telefono Opt" />
+                      <CFormInput value={dataLocalizacion.TelefonOpc} onChange={onChange} type="number" className="form-control form-control-sm" name="TelefonOpc" id="TelefonOpc" />
                     </CCol>
                   </CRow>
 
                   <strong>Correo:</strong>
                   <CRow className="mb-3">
                     <CCol sm={10} >
-                      <CFormInput value={dataLocalizacion.Correo} onChange={onChange} type="email" className="form-control form-control-sm" name="Correo" id="Correo" />
+                      <CFormInput value={dataLocalizacion.Email} onChange={onChange} type="email" className="form-control form-control-sm" name="Email" id="Email" />
                     </CCol>
                   </CRow>
 
                   <strong>Sitios Web </strong>
                   <CRow className="mb-3">
                     <CCol sm={10} >
-                      <CFormInput alue={dataLocalizacion.Web} type="text" className="form-control form-control-sm" name="Web" id="Web" />
+                      <CFormInput alue={dataLocalizacion.WebSite} onChange={onChange} type="text" className="form-control form-control-sm" name="WebSite" id="WebSite" />
                     </CCol>
                   </CRow>
                   <div className="d-grid">
@@ -434,17 +440,12 @@ function OfferProduct1(props) {
                   <div className="d-grid">
                     <CButton color="primary" className="mt-3"> Cancelar</CButton>
                   </div>
-
-
                 </CForm>
-
               </CCardBody>
             </CCard>
           </CCol>
         </CRow>
-
       </CContainer>
-
     </div>
   )
 

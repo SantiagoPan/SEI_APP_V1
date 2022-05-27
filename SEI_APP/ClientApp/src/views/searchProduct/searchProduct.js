@@ -53,7 +53,8 @@ function SearchProduct1(props) {
   const [dataCompra, setDataCompra] = useState({
     UnidadesCompradas: 0,
     IdProducto: 0,
-    IdTipoPago: 0
+    IdTipoPago: 0,
+    IdUsuarioComprador: ''
   });
 
   const [dataEnvio, setDataEnvio] = useState({
@@ -79,7 +80,7 @@ function SearchProduct1(props) {
   }
   const GetDepartamentos = async () => {
     axios
-      .get("https://localhost:44342/services/getDepartments")
+      .get("https://localhost:44342/product/getDepartments")
       .then(response => {
         setDepartamentos(response.data)
       })
@@ -166,9 +167,9 @@ function SearchProduct1(props) {
     }, this);
 
   const BuyProduct = (e) => {
-    console.log("dqwd");
     e.preventDefault();
-
+    var infoUser = JSON.parse(localStorage.getItem('myData'));
+    dataCompra.IdUsuarioComprador = infoUser.idUser
     const data = {
       envio: dataEnvio,
       producto: dataCompra
@@ -277,7 +278,7 @@ function SearchProduct1(props) {
                     <CModalHeader onClose={() => setVisibleBuy(false)}>
                           <CModalTitle>Datos del producto {producto.producto.nombreProducto}</CModalTitle>
                     </CModalHeader>
-                    <CCard className="mx-6">
+                        <CCard className="mx-6" key={producto.producto.idProducto}>
                           <CCardBody className="p-6">
                             <CAlert color="info">Datos de envio</CAlert>
                             <CForm onSubmit={BuyProduct} className="row g-3">
@@ -315,8 +316,9 @@ function SearchProduct1(props) {
                                   {barriosList}
                                 </CFormSelect>
                               </CCol>
+
                               <CCol xs={12}>
-                                <CFormCheck type="checkbox" id="envioGratis" checked={dataEnvio.EnvioGratis = 'Si'} label="Envio gratis" />
+                                <CCardText>El envio de este producto <strong> {producto.producto.caracteristicas.envioGratis} </strong> es gratis</CCardText>
                               </CCol>
 
                               <CAlert color="info">Datos de la compra</CAlert>
@@ -328,7 +330,7 @@ function SearchProduct1(props) {
                               </CCol>
 
                               <CCol md={6}>
-                                <CFormLabel htmlFor="IdMunicipio" className="col-sm-10 col-form-label">Unidades</CFormLabel>
+                                <CFormLabel htmlFor="UnidadesCompradas" className="col-sm-10 col-form-label">Unidades</CFormLabel>
                                 <CFormInput required type="number" min="1" max={producto.producto.unidades} value={dataCompra.UnidadesCompradas} onChange={onChange} className="form-control form-control-sm" name="UnidadesCompradas" id="UnidadesCompradas" />
                               </CCol>
 
@@ -360,7 +362,7 @@ function SearchProduct1(props) {
                         <CModalHeader onClose={() => setVisibleDet(false)}>
                           <CModalTitle>Detalles del producto - {producto.producto.nombreProducto}</CModalTitle>
                         </CModalHeader>
-                        <CCard className="mx-4">
+                        <CCard className="mx-4" key={producto.producto.idProducto}>
                           <CCardBody className="p-4">
                             <CForm className="user">
                               <CRow className="mb-3">

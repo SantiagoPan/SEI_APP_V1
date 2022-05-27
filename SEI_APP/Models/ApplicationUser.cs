@@ -20,5 +20,8 @@ namespace SEI_APP.Models
         public string Phone { get; set; }
         [Required]
         public string Address { get; set; }
+        public string Bank { get; set; }
+        public string TypeAccount { get; set; }
+        public string NumberAccount { get; set; }
     }
 }

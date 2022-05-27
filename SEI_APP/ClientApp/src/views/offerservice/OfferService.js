@@ -16,6 +16,8 @@ function OfferService1(props) {
   const [barrios, setBarrios] = useState([]);
   const [tipoCategoriaServicio, setTipoCategoriaServicio] = useState([]);
   const [categoriaServicio, setCategoriaServicio] = useState([]);
+  const [image, setImage] = useState("");
+  const [url, setUrl] = useState("");
   const [tipoServicio, setTipoServicio] = useState([]);
   const [dataServicio, setDataServicio] = useState({
       NombreServicio: '',
@@ -24,6 +26,7 @@ function OfferService1(props) {
       Imagen: '',
       Localizacion: '',
       CostoServicio: 0,
+      AplicaConvenio:'',
       IdTipoCategoriaServicio: '',
       IdCategoriaServicio: '',
       IdTipoServicio: '',
@@ -36,9 +39,9 @@ function OfferService1(props) {
       IdMunicipio: '',
       IdBarrio: '',
       Telefono: '',
-      TelefonOpt: '',
+      TelefonOpc: '',
       Correo: '',
-      Web: ''
+      WebSite: ''
     });
   const [dataCaracterizacion, setDataCaracterizacion] = useState({
       Experiencia: 0,
@@ -61,7 +64,7 @@ function OfferService1(props) {
       });
 
     axios
-      .get("https://localhost:44342/services/getDepartments")
+      .get("https://localhost:44342/product/getDepartments")
       .then(response => {
         setDepartamentos(response.data)
         setTimeout(() => {
@@ -155,37 +158,46 @@ function OfferService1(props) {
         )
       }, this);
   }
-
-
   const SaveService = (e) => {
-    const infoService = {
-      caracterizacion: dataCaracterizacion,
-      localizacion: dataLocalizacion,
-      servicio: dataServicio
-    };
-    e.preventDefault();
-    var infoUser = JSON.parse(localStorage.getItem('myData'));
-    dataServicio.IdUsuario = infoUser.idUser
-    const data = {
-      caracterizacion: dataCaracterizacion,
-      localizacion: dataLocalizacion,
-      servicio: dataServicio
-    };
-    const apiUrl = "https://localhost:44342/services/registerService";
-    axios.post(apiUrl, data)
-      .then((result) => {
-        debugger;
-        console.log(result.data);
-        const serializedState = JSON.stringify(result.data.UserDetails);
-        var a = localStorage.setItem('OfferServiceInfo', serializedState);
-        console.log("A:", a)
-        const user = result.data.token;
-        console.log(user);
-        if (result.status == 200)
-          window.location.reload(true);
-        else
-          alert('No registrado');
+    const dataImage = new FormData()
+    dataImage.append("file", image)
+    dataImage.append("upload_preset", "xx3mfqax")
+    dataImage.append("cloud_name", "ddsbfi1l5")
+    fetch("https://api.cloudinary.com/v1_1/ddsbfi1l5/image/upload", {
+      method: "post",
+      body: dataImage
+    })
+      .then(resp => resp.json())
+      .then(data => {
+        setUrl(data.url)
+        dataServicio.Imagen = data.url;
+        e.preventDefault();
+        var infoUser = JSON.parse(localStorage.getItem('myData'));
+        dataServicio.IdUsuario = infoUser.idUser
+        const dataS = {
+          caracterizacion: dataCaracterizacion,
+          localizacion: dataLocalizacion,
+          servicio: dataServicio
+        };
+        const apiUrl = "https://localhost:44342/services/registerService";
+        axios.post(apiUrl, dataS)
+          .then((result) => {
+            debugger;
+            console.log(result.data);
+            const serializedState = JSON.stringify(result.data.UserDetails);
+            var a = localStorage.setItem('OfferServiceInfo', serializedState);
+            console.log("A:", a)
+            const user = result.data.token;
+            console.log(user);
+            if (result.status == 200)
+              window.location.reload(true);
+            else
+              alert('No registrado');
+          })
+
       })
+      .catch(err => console.log(err))
+
   };
 
   const onChange = (e) => {
@@ -197,6 +209,7 @@ function OfferService1(props) {
 
   let departamentosList = departamentos.length > 0
     && departamentos.map((item, i) => {
+      const optionsDep = <option key={i} value={item.idDepartamento}>{item.nombre}</option>;
       return (
         <option key={i} value={item.idDepartamento}>{item.nombre}</option>
       )
@@ -257,24 +270,24 @@ function OfferService1(props) {
                       <CFormInput value={dataServicio.NombreServicio} onChange={onChange} type="text" className="form-control form-control-sm" id="NombreServicio" name="NombreServicio" />
                     </CInputGroup>
 
-                    <strong>Descripcion Del Servcio:</strong>
+                    <strong>Descripción Del Servicio:</strong>
                     <CInputGroup className="mb-3">
-                      <CFormTextarea value={dataServicio.Descripcion} onChange={onChange} type="text" className="form-control form-control-sm" id="Descripcion" name="Descripcion" rows="2" placeholder="Descripcion General Del Servicio" ></CFormTextarea>
+                      <CFormTextarea value={dataServicio.Descripcion} onChange={onChange} type="text" className="form-control form-control-sm" id="Descripcion" name="Descripcion" rows="2" placeholder="Descripción General Del Servicio" ></CFormTextarea>
                     </CInputGroup>
 
+
                     <CInputGroup className="mb-3">
-                      <CFormInput value={dataServicio.Imagen} onChange={onChange} type="file" name="myImage" accept="image/*" id="Imagen" name="Imagen" />
-                      <CInputGroupText component="label" htmlFor="Imagenes">Subir Fotos</CInputGroupText>
+                      <CFormInput type="file" onChange={(e) => setImage(e.target.files[0])} accept="image/*" id="Imagen" name="Imagen" />
                     </CInputGroup>
 
-                    <CAlert color="primary">Categoria</CAlert>
+                    <CAlert color="primary">Categoría</CAlert>
 
                     <strong>Tipo de Categoria</strong>
                     <CFormSelect value={dataServicio.IdTipoCategoriaServicio} onChange={onChangeTipoCategoriaServicio} aria-label="Default select example" name="IdTipoCategoriaServicio" id="IdTipoCategoriaServicio">
                       {tipoCategoriaServicioList}
                     </CFormSelect>
 
-                    <strong>Categoria</strong>
+                    <strong>Categoría</strong>
                     <CFormSelect value={dataServicio.IdCategoriaServicio} onChange={onChangeCategoriaServicio} aria-label="Default select example" name="IdCategoriaServicio" id="IdCategoriaServicio">
                       {categoriaServicioList}
                     </CFormSelect>
@@ -308,6 +321,12 @@ function OfferService1(props) {
                       <CCol sm="4">
                         <CFormInput alue={dataServicio.CostoServicio} onChange={onChange} type="number" className="form-control form-control-sm" name="CostoServicio" id="CostoServicio"/>
                       </CCol>
+                      <strong> A convenir con el cliente:</strong>
+                      <CFormSelect value={dataServicio.AplicaConvenio} onChange={onChange} aria-label="Default select example" name="AplicaConvenio" id="AplicaConvenio">
+                        <option>Seleccione...</option>
+                        <option value="Si">Si</option>
+                        <option value="No">No</option>
+                      </CFormSelect>
                     </CRow>
 
                     <CAlert color="primary">Localización</CAlert>
@@ -316,7 +335,7 @@ function OfferService1(props) {
                     <CFormSelect value={dataLocalizacion.IdDepartamento} onChange={onChangeDepartamento} aria-label="Default select example" name="IdDepartamento" id="IdDepartamento">
                       {departamentosList}
                     </CFormSelect>
-
+                      
                     <strong>Municipios</strong>
                     <CFormSelect value={dataLocalizacion.IdMunicipio} onChange={onChangeMunicipio} aria-label="Default select example" name="IdMunicipio" id="IdMunicipio">
                       {municipiosList}
@@ -341,31 +360,38 @@ function OfferService1(props) {
                       </CCol>
                     </CRow>
 
+                    <strong>Datos adicionales: </strong>
+                    <CRow className="mb-3">
+                      <CCol sm={10} >
+                        <CFormInput value={dataLocalizacion.DatosAdicionales} onChange={onChange} type="text" className="form-control form-control-sm" name="DatosAdicionales" id="DatosAdicionales" />
+                      </CCol>
+                    </CRow>
+
                     <strong>Telefono Personal:</strong>
                     <CRow className="mb-3">
                       <CCol sm={10} >
-                        <CFormInput value={dataLocalizacion.Telefono} onChange={onChange} type="number" className="form-control form-control-sm" name="Telefono" id="Telefono" />
+                        <CFormInput value={dataLocalizacion.Telefono} onChange={onChange} type="number" className="form-control form-control-sm" name="Telefono" id="Telefono"/>
                       </CCol>
                     </CRow>
 
                     <strong>Telefono Adicional: </strong>
                     <CRow className="mb-3">
                       <CCol sm={10} >
-                        <CFormInput value={dataLocalizacion.TelefonOpt} onChange={onChange} type="number" className="form-control form-control-sm" name="TelefonOpt" id="TelefonOpt" />
+                        <CFormInput value={dataLocalizacion.TelefonOpc} onChange={onChange} type="number" className="form-control form-control-sm" name="TelefonOpc" id="TelefonOpc" />
                       </CCol>
                     </CRow>
 
                     <strong>Correo:</strong>
                     <CRow className="mb-3">
                       <CCol sm={10} >
-                        <CFormInput value={dataLocalizacion.Correo} onChange={onChange} type="email" className="form-control form-control-sm" name="Correo" id="Correo" />
+                        <CFormInput value={dataLocalizacion.Email} onChange={onChange} type="email" className="form-control form-control-sm" name="Email" id="Email" />
                       </CCol>
                     </CRow>
 
                     <strong>Sitios Web </strong>
                     <CRow className="mb-3">
                       <CCol sm={10} >
-                        <CFormInput alue={dataLocalizacion.Web} type="text" className="form-control form-control-sm" name="Web" id="Web" />
+                        <CFormInput alue={dataLocalizacion.WebSite} onChange={onChange} type="text" className="form-control form-control-sm" name="WebSite" id="WebSite" />
                       </CCol>
                     </CRow>
                     <div className="d-grid">

@@ -129,7 +129,7 @@ function HireService1(props) {
           <CCol md={9} lg={7} xl={12}>
             <CCard className="mx-4">
               <CCardBody className="p-4">
-                <h2>Servicios Dispibles</h2>
+                <h2>Servicios Disponibles</h2>
                 {/*<CForm className="user">*/}
                  
                 {/*  <div>*/}
@@ -154,8 +154,11 @@ function HireService1(props) {
                           <br></br>
                           <CCardSubtitle><strong>Descripción</strong> </CCardSubtitle>
                           <CCardText>{servicio.servicio.descripcion}</CCardText>
-                          <CCardText><strong>Categoria: </strong> <i> {servicio.servicio.tipoServicio}</i></CCardText>
-                          <CCardText><strong>Precio: $</strong> {servicio.servicio.costoServicio}</CCardText>
+                          {servicio.servicio.aplicaConvenio == "Si" ? (
+                            <CCardText><strong>Tipo de pago: </strong> A convenir con el prestador</CCardText>
+                          ) : (
+                            <CCardText><strong>Precio: </strong>{servicio.servicio.costoServicio}</CCardText>
+                          )}
                           <div className="d-grid gap-2 d-md-block">
                             <CButton href="" color="primary" onClick={showModalHire} key={servicio.servicio.idServicio}><CIcon icon={cilCart} />Contratar </CButton>
                           </div>
@@ -176,19 +179,21 @@ function HireService1(props) {
                               <CRow className="mb-3">
                                 <CCardSubtitle><strong>Descripción</strong> </CCardSubtitle>
                                 <CCardText>{servicio.servicio.descripcion}</CCardText>
-                                <CCardText><strong>Calificación: </strong>{servicio.servicio.caracteristicas.calificacion}</CCardText>
-                                <CCardText><strong>Categoria: </strong>{servicio.servicio.tipoServicio}</CCardText>
+                                <CCardText><strong>Calificación: </strong>{servicio.servicio.calificacion}</CCardText>
+                                <CCardText><strong>Categoría: </strong>{servicio.servicio.tipoServicio}</CCardText>
                                 <CCardText><strong>Experiencia: </strong>{servicio.servicio.caracteristicas.experiencia}</CCardText>
                                 <CCardText><strong>Incluye: </strong>{servicio.servicio.caracteristicas.incluye}</CCardText>
                                 <CCardText><strong>No Incluye: </strong>{servicio.servicio.caracteristicas.noIncluye}</CCardText>
-                                <CAlert color="info">Datos del empleado</CAlert>
+                                <CAlert color="info">Datos Del Prestador</CAlert>
                                 <CCardText><strong>Nombre: </strong>{servicio.servicio.caracteristicas.nombre}</CCardText>
                                 <CCardText><strong>Teléfono: </strong>{servicio.servicio.caracteristicas.telefono}</CCardText>
                                 <CCardText><strong>Ubicación: </strong>{servicio.servicio.localizacion.ciudad}, {servicio.servicio.localizacion.departmento} <b> Barrio: </b> {servicio.servicio.localizacion.barrio}</CCardText>
-                                <CFormLabel htmlFor="IdTipoPago" className="col-sm-10 col-form-label">Tipo de pago</CFormLabel>
-                                <CFormSelect value={dataContrato.IdTipoPago} onChange={onChange} aria-label="Default select example" name="IdTipoPago" id="IdTipoPago" label="Tipo de pago">
-                                  {tipoPagoList}
-                                </CFormSelect>
+                                {servicio.servicio.aplicaConvenio == "Si" ? (
+                                  <CCardText><strong>Tipo de pago: </strong> A convenir con el prestador</CCardText>
+                                ) : (
+                                    <CCardText><strong>Precio: </strong>{servicio.servicio.costoServicio}</CCardText>
+                                )}
+                                
                               </CRow>
 
                               <CCol md={6}>
@@ -201,8 +206,6 @@ function HireService1(props) {
                         </CModalFooter>
                       </CModal>
                     ))}
-
-
                 </div>
               </CCardBody>
             </CCard>

@@ -4,10 +4,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SEI_APP.Areas.Identity.Data
 {
-    public class Calificaciones
+    public class CalificacionServicio
     {
         [Key]
-        public int IdCalificaciones { get; set; }
+        public int IdCalificacionServicio { get; set; }
         public int Calificacion { get; set; }
         public string Observacion { get; set; }
         public DateTime? FechaCreacion { get; set; }
@@ -22,6 +22,6 @@ namespace SEI_APP.Areas.Identity.Data
         public string IdUsuarioCalificado { get; set; }
         [Required]
         [ForeignKey("IdProducto")]
-        public int IdProducto { get; set; }
+        public int IdServicio { get; set; }
     }
 }

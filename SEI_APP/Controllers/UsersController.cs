@@ -70,7 +70,7 @@ namespace SEI_APP.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<ResponseAuthDto>> Login([FromBody] UserDto userData)
         {
-
+            JsonResult resultLogin = new JsonResult(userData);
             var result = await signInManager.PasswordSignInAsync(userData.Email, userData.Password, isPersistent: false, lockoutOnFailure: false);
             
             if (result.Succeeded)
@@ -78,12 +78,96 @@ namespace SEI_APP.Controllers
                 ResponseAuthDto response = new ResponseAuthDto();
                 var infoUser = await contextDB.Users.Where(x=>x.Email == userData.Email).FirstOrDefaultAsync();
                 response.IdUser = infoUser.Id;
+                var respToken = await BuildToken(userData, response);
+                resultLogin.Value = respToken;
+                resultLogin.ContentType = "application/json";
+                resultLogin.StatusCode = 200;
 
-                return await BuildToken(userData, response);
+                return resultLogin;
             }
             else
             {
-                return BadRequest("Login Incorrecto!!");
+                resultLogin.Value = "LoginError";
+                resultLogin.ContentType = "application/json";
+                resultLogin.StatusCode = 200;
+
+                return resultLogin;
+            }
+        }
+
+        [HttpPost("saveBankInfo")]
+        public async Task<ActionResult<ResponseAuthDto>> SaveBankInfo([FromBody] RegisterDto.InfoBank dataBank)
+        {
+            JsonResult result = new JsonResult(dataBank);
+            try
+            {
+                if (dataBank.IdUser == "")
+                {
+                    result.Value = "IdUser no encontrado";
+                    result.ContentType = "application/json";
+                    result.StatusCode = 400;
+
+                    return result;
+                }
+                var user = await contextDB.Users.Where(x=>x.Id == dataBank.IdUser).FirstOrDefaultAsync();
+
+                user.Bank = dataBank.Bank;
+                user.TypeAccount = dataBank.TypeAccount;
+                user.NumberAccount = dataBank.NumberAccount;
+
+                var updateBankInfo = await contextDB.SaveChangesAsync();
+                if (updateBankInfo != 0)
+                {
+                    result.Value = "Información Bancaria Actuaizada.";
+                    result.ContentType = "application/json";
+                    result.StatusCode = 200;
+
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                result.Value = err;
+            }
+            result.ContentType = "application/json";
+            result.StatusCode = 400;
+
+            return result;
+        }
+
+        [HttpGet("getInfoBank")]
+        public async Task<ActionResult> GetInfoBank(string idUser)
+        {
+            try
+            {
+                var infoBank = new List<RegisterDto.InfoBank>();
+                JsonResult result = new JsonResult(infoBank);
+                var userInfo = await contextDB.Users.Where(x => x.Id == idUser).FirstOrDefaultAsync();
+
+                if (userInfo == null)
+                {
+                    result.Value = null;
+                    result.ContentType = "application/json";
+                    result.StatusCode = 200;
+                    return NoContent();
+                }
+                var bank = new RegisterDto.InfoBank();
+                bank.Id = 1;
+                bank.Bank = userInfo.Bank;
+                bank.NumberAccount = userInfo.NumberAccount;
+                bank.TypeAccount = userInfo.TypeAccount;
+
+                infoBank.Add(bank);
+                result.Value = infoBank;
+                result.ContentType = "application/json";
+                result.StatusCode = 200;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                throw;
             }
         }
 

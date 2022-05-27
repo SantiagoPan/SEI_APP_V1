@@ -37,12 +37,14 @@ namespace SEI_APP.Areas.Identity.Data
         public DbSet<TipoDocumentoIdentidad> TipoDocumentoIdentidad { get; set; }
         public DbSet<EstadoVenta> EstadoVenta { get; set; }
         public DbSet<TipoPago> TipoPago { get; set; }
-        public DbSet<Calificaciones> Calificaciones { get; set; }
+        public DbSet<CalificacionProducto> CalificacionProducto { get; set; }
+        public DbSet<CalificacionServicio> CalificacionServicio { get; set; }
         public DbSet<Envios> Envios { get; set; }
         public DbSet<MotivoFinalizacionServicio> MotivoFinalizacionServicio { get; set; }
         public DbSet<VentasServicios> VentasServicios { get; set; }
         public DbSet<VentasProductos> VentasProductos { get; set; }
         public DbSet<AdjuntosVentasServicios> AdjuntosVentasServicios { get; set; }
+        public DbSet<MensajesVentaServicio> MensajesVentaServicio { get; set; }
 
 
 

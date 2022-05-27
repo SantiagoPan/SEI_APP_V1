@@ -20,30 +20,31 @@ import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 
 function Login1(props) {
+
   const [visible, setVisible] = useState(false)
   const [userInfo, setUser] = useState({ email: '', password: '' });
-  const apiUrl = "https://localhost:44342/users/login";
+
   const Login = (e) => {
     e.preventDefault();
     const data = { email: userInfo.email, password: userInfo.password };
+    const apiUrl = "https://localhost:44342/users/login";
     axios.post(apiUrl, data)
       .then((result) => {
-        console.log(result.data);
+        console.log("result.data ", result.data);
         const serializedState = JSON.stringify(result.data);
         var a = localStorage.setItem('myData', serializedState);
         console.log("A:", a)
         const user = result.data.token;
         console.log(user);
-        if (result.status == 200) {
-          window.location.href = '#/Dashboard';
+
+        if (result.status == 200 && result.data != 'LoginError') {
+           window.location.href = '#/Dashboard';
         }
         else {
-          setTimeout(() => {
-            setVisible(true);
-          }, 1000)
+          setVisible(true)
         }
       })
-    setVisible(true)
+    
   };
   const onChange = (e) => {
     e.persist();

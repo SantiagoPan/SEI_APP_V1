@@ -18,5 +18,9 @@ namespace SEI_APP.Areas.Identity.Data
         public string UsuarioCreacion { get; set; }
         public int IdMunicipio { get; set; }
         public int IdBarrio { get; set; }
+        public string Telefono { get; set; }
+        public string TelefonoOpc { get; set; }
+        public string Email { get; set; }
+        public string WebSite { get; set; }
     }
 }

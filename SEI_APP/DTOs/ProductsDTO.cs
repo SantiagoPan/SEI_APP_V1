@@ -25,6 +25,7 @@ namespace SEI_APP.DTOs
                 public int IdEstadoProductoServicio { get; set; }
                 public int IdLocalizacion { get; set; }
                 public string Imagen { get; set; }
+                public string IdUsuario { get; set; }
         }
 
             public class Characterization
@@ -40,12 +41,17 @@ namespace SEI_APP.DTOs
                 public string UsuarioCreacion { get; set; }
                 public int IdTipoMaterialProducto { get; set; }
                 public int IdTipoGarantiaProducto { get; set; }
-            }
+                public string EnvioGratis { get; set; }
+        }
         
 
             public class Localization
             {
                 public string Direccion { get; set; }
+                public string Telefono { get; set; }
+                public string TelefonOpc { get; set; }
+                public string Email { get; set; }
+                public string WebSite { get; set; }
                 public string CodigoPostal { get; set; }
                 public string DatosAdicionales { get; set; }
                 public string FechaCreacion { get; set; }
@@ -57,6 +63,15 @@ namespace SEI_APP.DTOs
             }
 
         }
+    public class ProductsDTOQualify
+    {
+        public string IdUsuario { get; set; }
+        public int IdProducto { get; set; }
+        public int Calificacion { get; set; }
+        public string Observacion { get; set; }
+
+    }
+
     public class ProductsDTOBuy
     {
         public Producto producto { get; set; }
@@ -66,6 +81,7 @@ namespace SEI_APP.DTOs
             public int IdProducto { get; set; }
             public int IdTipoPago { get; set; }
             public int UnidadesCompradas { get; set; }
+            public string IdUsuarioComprador { get; set; }
         }
 
         public class Envio
@@ -75,7 +91,6 @@ namespace SEI_APP.DTOs
             public string CorreoElectronico { get; set; }
             public string DireccionEnvio { get; set; }
             public string DatosAdicionales { get; set; }
-            public string EnvioGratis { get; set; }
             public int IdMunicipio { get; set; }
             public int IdBarrio { get; set; }
             public int IdVentasProductos { get; set; }
@@ -95,7 +110,13 @@ namespace SEI_APP.DTOs
             public string Imagen { get; set; }
             public double CostoProducto { get; set; }
             public double Unidades { get; set; }
+            public string TipoPago { get; set; }
+            public string NombreVendedor { get; set; }
+            public string FechaCompra { get; set; }
             public string NombreTipoProducto { get; set; }
+            public string Condicion { get; set; }
+            public string Marca { get; set; }
+            public double ValorTotalCompra { get; set; }
             public int Calificacion { get; set; }
             public string EstrellasCalificacion { get; set; }
             public Caracteristicas Caracteristicas { get; set; }
@@ -112,6 +133,7 @@ namespace SEI_APP.DTOs
             public string Condicion { get; set; }
             public string Material { get; set; }
             public string Garantia { get; set; }
+            public string EnvioGratis { get; set; }
         }
         public class Localizacion
         {

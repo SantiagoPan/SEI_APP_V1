@@ -18,6 +18,7 @@ import {
   cilFile,
   cilLockLocked,
   cilSettings,
+  cilExternalLink,
   cilTask,
   cilUser,
 } from '@coreui/icons'
@@ -37,20 +38,17 @@ const AppHeaderDropdown = () => {
         <CDropdownItem href="#">
           <CIcon icon={cilEnvelopeOpen} className="me-2" />
           Mensajes
-          <CBadge color="success" className="ms-2">
-            42
-          </CBadge>
         </CDropdownItem>
         <CDropdownHeader className="bg-light fw-semibold py-2">Opciones</CDropdownHeader>
         <CDropdownItem href="#">
-          <CIcon icon={cilSettings} className="me-2" />
-          Configuración
+          <CIcon icon={cilExternalLink} className="me-2" />
+          Mis Publicaciones
         </CDropdownItem>
         <CDropdownItem href="/#/MyOrders">
           <CIcon icon={cilMoney} className="me-2" />
           Mis Compras
         </CDropdownItem>
-        <CDropdownItem href="#">
+        <CDropdownItem href="/#/MySales">
           <CIcon icon={cilCreditCard} className="me-2" />
           Mis Ventas
           <CBadge color="secondary" className="ms-2">

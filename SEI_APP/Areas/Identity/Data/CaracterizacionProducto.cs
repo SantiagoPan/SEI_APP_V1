@@ -23,5 +23,6 @@ namespace SEI_APP.Areas.Identity.Data
         [Required]
         [ForeignKey("IdTipoGarantiaProducto")]
         public int IdTipoGarantiaProducto { get; set; }
+        public string EnvioGratis { get; set; }
     }
 }

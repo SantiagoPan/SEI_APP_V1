@@ -20,6 +20,8 @@ namespace SEI_APP.Areas.Identity.Data
         public DateTime? FechaCreacion { get; set; }
         [Required]
         public double CostoServicio { get; set; }
+        [Required]
+        public bool AplicaConvenio { get; set; }
         [ForeignKey("IdTipoServicio")]
         public int IdTipoServicio { get; set; }
         [Required]

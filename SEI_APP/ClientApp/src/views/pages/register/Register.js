@@ -73,9 +73,6 @@ function Register1(props) {
     await axios.get("https://localhost:44342/users/getDocumentType")
       .then(response => {
         setTipoDocumento(response.data)
-        setTimeout(() => {
-          console.log(tipoDocumento);
-        }, 3000)
       })
       .catch((error) => {
         console.log(error);
@@ -96,7 +93,6 @@ function Register1(props) {
     e.persist();
     setUser({ ...userInfo, [e.target.name]: e.target.value });
   }
-
 
 
   return (

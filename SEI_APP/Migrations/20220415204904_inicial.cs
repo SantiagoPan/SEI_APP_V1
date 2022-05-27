@@ -46,7 +46,10 @@ namespace SEI_APP.Migrations
                     TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false),
+                    Bank = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    TypeAccount = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    NumberAccount = table.Column<string>(type: "nvarchar(100)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -282,6 +285,7 @@ namespace SEI_APP.Migrations
                 UsuarioCreacion = table.Column<string>(type: "nvarchar(max)", nullable: true),
                 IdTipoMaterialProducto = table.Column<int>(type: "int", nullable: false),
                 IdTipoGarantiaProducto = table.Column<int>(type: "int", nullable: false),
+                EnvioGratis = table.Column<string>(type: "nvarchar(max)", nullable: true),
 
             },
               constraints: table =>
@@ -384,6 +388,10 @@ namespace SEI_APP.Migrations
              UsuarioCreacion = table.Column<string>(type: "nvarchar(max)", nullable: true),
              IdMunicipio = table.Column<int>(type: "int", nullable: false),
              IdBarrio = table.Column<int>(type: "int", nullable: false),
+             Telefono = table.Column<string>(type: "nvarchar(max)", nullable: true),
+             TelefonoOpc = table.Column<string>(type: "nvarchar(max)", nullable: true),
+             Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+             Website = table.Column<string>(type: "nvarchar(max)", nullable: true),
          },
             constraints: table =>
             {
@@ -525,6 +533,7 @@ namespace SEI_APP.Migrations
                   UsuarioModificacion = table.Column<string>(type: "nvarchar(max)", nullable: true),
                   UsuarioCreacion = table.Column<string>(type: "nvarchar(max)", nullable: true),
                   FechaCreacion = table.Column<DateTime>(type: "date", nullable: true),
+                  AplicaConvenio = table.Column<bool>(type: "bit", nullable: false),
                   CostoServicio = table.Column<float>(type: "float", nullable: false),
                   IdTipoServicio = table.Column<int>(type: "int", nullable: false),
                   IdCaracterizacionServicio = table.Column<int>(type: "int", nullable: false),
@@ -580,6 +589,7 @@ namespace SEI_APP.Migrations
                 IdEstadoProductoServicio = table.Column<int>(type: "int", nullable: false),
                 IdLocalizacion = table.Column<int>(type: "int", nullable: false),
                 Imagen = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                
             },
 
             constraints: table =>
@@ -683,10 +693,48 @@ namespace SEI_APP.Migrations
             });
 
             migrationBuilder.CreateTable(
-            name: "Calificaciones",
+                name: "CalificacionServicio",
+                columns: table => new
+                {
+                    IdCalificacionServicio = table.Column<int>(type: "int", nullable: false).Annotation("SqlServer:Identity", "1, 1"),
+                    Calificacion = table.Column<int>(type: "int", nullable: false),
+                    Observacion = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FechaCreacion = table.Column<DateTime>(type: "date", nullable: true),
+                    FechaModificacion = table.Column<DateTime>(type: "date", nullable: true),
+                    UsuarioCreacion = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UsuarioModificacion = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IdUsuarioCliente = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IdUsuarioCalificado = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IdServicio = table.Column<int>(type: "int", nullable: false),
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IdCalificacionServicio", x => x.IdCalificacionServicio);
+                    table.ForeignKey(
+                      name: "FK_CalificacionServicio_IdUsuarioCliente",
+                      column: x => x.IdUsuarioCliente,
+                      principalTable: "AspNetUsers",
+                      principalColumn: "Id",
+                      onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                         name: "FK_CalificacionServicio_IdUsuarioCalificado",
+                         column: x => x.IdUsuarioCalificado,
+                         principalTable: "AspNetUsers",
+                         principalColumn: "Id",
+                         onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                         name: "FK_CalificacionServicio_IdServicio",
+                         column: x => x.IdServicio,
+                         principalTable: "Servicio",
+                         principalColumn: "IdServicio",
+                         onDelete: ReferentialAction.NoAction);
+          });
+
+            migrationBuilder.CreateTable(
+            name: "CalificacionProducto",
             columns: table => new
             {
-                IdCalificaciones = table.Column<int>(type: "int", nullable: false).Annotation("SqlServer:Identity", "1, 1"),
+                IdCalificacionProducto = table.Column<int>(type: "int", nullable: false).Annotation("SqlServer:Identity", "1, 1"),
                 Calificacion = table.Column<int>(type: "int", nullable: false),
                 Observacion = table.Column<string>(type: "nvarchar(max)", nullable: true),
                 FechaCreacion = table.Column<DateTime>(type: "date", nullable: true),
@@ -699,21 +747,21 @@ namespace SEI_APP.Migrations
             },
             constraints: table =>
             {
-                table.PrimaryKey("PK_IdCalificaciones", x => x.IdCalificaciones);
+                table.PrimaryKey("PK_IdCalificacionProducto", x => x.IdCalificacionProducto);
                 table.ForeignKey(
-                  name: "FK_Calificaciones_IdUsuarioCliente",
+                  name: "FK_CalificacionProducto_IdUsuarioCliente",
                   column: x => x.IdUsuarioCliente,
                   principalTable: "AspNetUsers",
                   principalColumn: "Id",
                   onDelete: ReferentialAction.NoAction);
                 table.ForeignKey(
-                     name: "FK_Calificaciones_IdUsuarioCalificado",
+                     name: "FK_CalificacionProducto_IdUsuarioCalificado",
                      column: x => x.IdUsuarioCalificado,
                      principalTable: "AspNetUsers",
                      principalColumn: "Id",
                      onDelete: ReferentialAction.NoAction);
                 table.ForeignKey(
-                     name: "FK_Calificaciones_IdProducto",
+                     name: "FK_CalificacionProducto_IdProducto",
                      column: x => x.IdProducto,
                      principalTable: "Producto",
                      principalColumn: "IdProducto",
@@ -820,6 +868,28 @@ namespace SEI_APP.Migrations
                  principalColumn: "IdVentasServicios",
                  onDelete: ReferentialAction.NoAction);
 
+            });
+
+            migrationBuilder.CreateTable(
+            name: "MensajesVentaServicio",
+            columns: table => new
+            {
+                IdMensajesVentaServicio = table.Column<int>(type: "int", nullable: false).Annotation("SqlServer:Identity", "1, 1"),
+                Mensaje = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                FechaCreacion = table.Column<string>(type: "date", nullable: false),
+                UsuarioVendedor = table.Column<DateTime>(type: "nvarchar(max)", nullable: false),
+                UsuarioComprador = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                IdVentasServicios = table.Column<int>(type: "int", nullable: true),
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_IdMensajesVentaServicio", x => x.IdMensajesVentaServicio);
+                table.ForeignKey(
+                 name: "FK_IdMensajesVentaServicio_IdVentasServicios",
+                 column: x => x.IdVentasServicios,
+                 principalTable: "VentasServicios",
+                 principalColumn: "IdVentasServicios",
+                 onDelete: ReferentialAction.NoAction);
             });
 
             migrationBuilder.CreateTable(
@@ -1042,7 +1112,10 @@ namespace SEI_APP.Migrations
               name: "TipoPago");
 
             migrationBuilder.DropTable(
-              name: "Calificaciones");
+              name: "CalificacionProducto");
+
+            migrationBuilder.DropTable(
+              name: "CalificacionServicio");
 
             migrationBuilder.DropTable(
               name: "MotivoFinalizacionServicio");

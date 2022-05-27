@@ -37,8 +37,14 @@ namespace SEI_APP.Controllers
                     {
                         return BadRequest();
                     }
-                    JsonResult result = new JsonResult(departments);
-                    result.Value = departments;
+                    var optionSelect = new Departamento();
+                    optionSelect.IdDepartamento = departments.Count + 1;
+                    optionSelect.Nombre = "Seleccione";
+                    optionSelect.CodigoDane = "1";
+                    departments.Add(optionSelect);
+                    List<Departamento> SortedList = departments.OrderByDescending(o => o.IdDepartamento).ToList();
+                    JsonResult result = new JsonResult(SortedList);
+                    result.Value = SortedList;
                     result.ContentType = "application/json";
                     result.StatusCode = 200;
                     return result;
@@ -71,13 +77,23 @@ namespace SEI_APP.Controllers
                     var prodInfo = new ProductsDTOResponse();
                     var prod = new ProductsDTOResponse.Producto();
                     var productoC = await contextDB.Producto.Where(x =>x.IdProducto == item.IdProducto).FirstOrDefaultAsync();
+                    var caracterizacionProd = await contextDB.CaracterizacionProducto.Where(x => x.IdCaracterizacionProducto == productoC.IdCaracterizacionProducto).FirstOrDefaultAsync();
+                    var userInfo = await contextDB.Users.Where(x => x.Id == productoC.UsuarioCreacion).FirstOrDefaultAsync();
+                    var calificado = await contextDB.CalificacionProducto.Where(x => x.IdProducto == item.IdProducto && x.IdUsuarioCliente == idUser).ToListAsync();
                     prod.NombreProducto = productoC.NombreProducto;
                     prod.CostoProducto = productoC.CostoProducto;
                     prod.Imagen = productoC.Imagen;
                     prod.IdProducto = productoC.IdProducto;
-                    prod.EstadoVenta = await contextDB.EstadoVenta.Where(x => x.IdEstadoVenta == item.IdEstadoVenta).Select(x => x.Nombre).FirstOrDefaultAsync();
+                    prod.Condicion = caracterizacionProd.Condicion;
+                    prod.FechaCompra = item.FechaCreacion.ToString();
+                    prod.Calificacion = calificado.Count();
+                    prod.Unidades = item.UnidadesCompradas;
+                    prod.ValorTotalCompra = item.ValorTotal;
+                    prod.Marca = caracterizacionProd.Marca;
+                    prod.TipoPago = await contextDB.TipoPago.Where(x => x.IdTipoPago == item.IdTipoPago).Select(x => x.Nombre).FirstOrDefaultAsync();
+                    prod.NombreVendedor = userInfo.Name + " " + userInfo.Lastname;
+                   
                     prodInfo.producto = prod;
-
                     productos.Add(prodInfo);
                 }
                 
@@ -110,8 +126,12 @@ namespace SEI_APP.Controllers
                     result.StatusCode = 200;
                     return NoContent();
                 }
-
-                result.Value = tipoMaterialProducto;
+                var optionSelect = new TipoMaterialProducto();
+                optionSelect.IdTipoMaterialProducto = tipoMaterialProducto.Count + 1;
+                optionSelect.Nombre = "Seleccione";
+                tipoMaterialProducto.Add(optionSelect);
+                List<TipoMaterialProducto> SortedList = tipoMaterialProducto.OrderByDescending(o => o.IdTipoMaterialProducto).ToList();
+                result.Value = SortedList;
                 result.ContentType = "application/json";
                 result.StatusCode = 200;
                 return result;
@@ -138,8 +158,12 @@ namespace SEI_APP.Controllers
                     result.StatusCode = 200;
                     return NoContent();
                 }
-
-                result.Value = tipoCategoriasProducto;
+                var optionSelect = new TipoCategoriaProducto();
+                optionSelect.IdTipoCategoriaProducto = tipoCategoriasProducto.Count + 1;
+                optionSelect.Nombre = "Seleccione";
+                tipoCategoriasProducto.Add(optionSelect);
+                List<TipoCategoriaProducto> SortedList = tipoCategoriasProducto.OrderByDescending(o => o.IdTipoCategoriaProducto).ToList();
+                result.Value = SortedList;
                 result.ContentType = "application/json";
                 result.StatusCode = 200;
                 return result;
@@ -164,12 +188,18 @@ namespace SEI_APP.Controllers
                     result.Value = null;
                     result.ContentType = "application/json";
                     result.StatusCode = 200;
+
                     return NoContent();
                 }
-
-                result.Value = tipoPago;
+                var optionSelect = new TipoPago();
+                optionSelect.IdTipoPago = tipoPago.Count + 1;
+                optionSelect.Nombre = "Seleccione";
+                tipoPago.Add(optionSelect);
+                List<TipoPago> SortedList = tipoPago.OrderByDescending(o => o.IdTipoPago).ToList();
+                result.Value = SortedList;
                 result.ContentType = "application/json";
                 result.StatusCode = 200;
+
                 return result;
             }
             catch (Exception ex)
@@ -192,11 +222,19 @@ namespace SEI_APP.Controllers
                     result.Value = null;
                     result.ContentType = "application/json";
                     result.StatusCode = 200;
+
                     return NoContent();
                 }
-                result.Value = productCategory;
+                var optionSelect = new CategoriaProducto();
+                int maxId = productCategory.Max(u => u.IdCategoriaProducto);
+                optionSelect.IdCategoriaProducto = maxId + 1;
+                optionSelect.Nombre = "Seleccione";
+                productCategory.Add(optionSelect);
+                List<CategoriaProducto> SortedList = productCategory.OrderByDescending(o => o.IdCategoriaProducto).ToList();
+                result.Value = SortedList;
                 result.ContentType = "application/json";
                 result.StatusCode = 200;
+
                 return result;
             }
             catch (Exception ex)
@@ -222,7 +260,13 @@ namespace SEI_APP.Controllers
 
                     return NoContent();
                 }
-                result.Value = productType;
+                var optionSelect = new TipoProducto();
+                int maxId = productType.Max(u => u.IdTipoProducto);
+                optionSelect.IdTipoProducto = maxId +1;
+                optionSelect.NombreTiipoProducto = "Seleccione";
+                productType.Add(optionSelect);
+                List<TipoProducto> SortedList = productType.OrderByDescending(o => o.IdTipoProducto).ToList();
+                result.Value = SortedList;
                 result.ContentType = "application/json";
                 result.StatusCode = 200;
 
@@ -245,7 +289,6 @@ namespace SEI_APP.Controllers
                 var products = new List<Producto>();
                 var productsList = new List<ProductsDTOResponse>();
                 var idUser = await contextDB.Users.FirstOrDefaultAsync();
-                //var productsList = await contextDB.Producto.Where(x => x.NombreProducto.Contains(strSearch)).ToListAsync();
                 products = await contextDB.Producto.ToListAsync();
                 foreach (var item in products)
                 {
@@ -263,10 +306,18 @@ namespace SEI_APP.Controllers
                     loc = await GetInfoLocalizacion(item.IdLocalizacion);
                     cal = await GetInfoCalificacion(item.IdProducto);
                     string stars = "";
-                    for (int i = 0; i < cal; i++)
+                    if (cal == 0)
                     {
-                        stars += "★ ";
+                        stars = "Sin calificaciones.";
                     }
+                    else
+                    {
+                        for (int i = 0; i < cal; i++)
+                        {
+                            stars += "★ ";
+                        }
+                    }
+
                     prod.EstrellasCalificacion = stars;
                     prod.NombreTipoProducto = await contextDB.TipoProducto.Where(x => x.IdTipoProducto == item.IdTipoProducto).Select(x => x.NombreTiipoProducto).FirstOrDefaultAsync();
                     prod.Localizacion = loc;
@@ -292,6 +343,7 @@ namespace SEI_APP.Controllers
             }
             result.ContentType = "application/json";
             result.StatusCode = 400;
+
             return result;
         }
 
@@ -308,6 +360,7 @@ namespace SEI_APP.Controllers
                     caracterizacionInfo.Condicion = caracterizacion.Condicion;
                     caracterizacionInfo.Modelo = caracterizacion.Modelo;
                     caracterizacionInfo.Marca = caracterizacion.Marca;
+                    caracterizacionInfo.EnvioGratis = caracterizacion.EnvioGratis;
             }
             catch (Exception ex)
             {
@@ -338,15 +391,17 @@ namespace SEI_APP.Controllers
             return LocalizacionInfo;
         }
 
+
         public async Task<int> GetInfoCalificacion(int idProducto)
         {
             var CalificacionInfo = 0;
             try
             {
-                var calificaciones = await contextDB.Calificaciones.Where(x => x.IdProducto == idProducto).ToListAsync();
+                var calificaciones = await contextDB.CalificacionProducto.Where(x => x.IdProducto == idProducto).ToListAsync();
                 if (calificaciones.Count == 0)
                 {
                     CalificacionInfo = 0;
+
                     return CalificacionInfo;
                 }
                 var total = calificaciones.Sum(x => x.Calificacion);
@@ -364,24 +419,68 @@ namespace SEI_APP.Controllers
             return CalificacionInfo;
         }
 
+        [HttpPost("qualifyProduct")]
+        public async Task<JsonResult> QualifyProduct([FromBody] ProductsDTOQualify productData)
+        {
+            JsonResult result = new JsonResult(productData);
+            try
+            {
+                if (productData.IdProducto == 0)
+                {
+                    result.ContentType = "application/json";
+                    result.StatusCode = 400;
+
+                    return result;
+                }
+                var calificacion = new CalificacionProducto();
+                var productInfo = await contextDB.Producto.Where(x => x.IdProducto == productData.IdProducto).FirstOrDefaultAsync();
+                calificacion.IdProducto = productData.IdProducto;
+                calificacion.FechaCreacion = DateTime.Now;
+                calificacion.Calificacion = productData.Calificacion;
+                calificacion.Observacion = productData.Observacion;
+                calificacion.IdUsuarioCalificado = productInfo.UsuarioCreacion;
+                calificacion.IdUsuarioCliente = productData.IdUsuario;
+
+                contextDB.CalificacionProducto.Add(calificacion);
+                var saveC = await contextDB.SaveChangesAsync();
+
+                if (saveC != 0)
+                {
+                    result.ContentType = "application/json";
+                    result.StatusCode = 200;
+
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                result.Value = err;
+            }
+            result.ContentType = "application/json";
+            result.StatusCode = 400;
+
+            return result;
+        }
+
+
         [HttpPost("buyProduct")]
         public async Task<JsonResult> BuyProduct([FromBody] ProductsDTOBuy productData)
         {
             JsonResult result = new JsonResult(productData);
-            if (productData.producto.IdProducto == 0)
-            {
-                result.ContentType = "application/json";
-                result.StatusCode = 400;
-
-                return result;
-            }
-
             try
             {
-                var idUser = await contextDB.Users.FirstOrDefaultAsync();
-                var idVentasProductos = await saveVentasProductos(productData.producto, idUser.Id);
+                if (productData.producto.IdProducto == 0)
+                {
+                    result.ContentType = "application/json";
+                    result.StatusCode = 400;
+
+                    return result;
+                }
+               
+                var idVentasProductos = await saveVentasProductos(productData.producto);
                 productData.envio.IdVentasProductos = idVentasProductos;
-                var idEnvio = await saveEnvioProducto(productData.envio, idUser.Id);
+                var idEnvio = await saveEnvioProducto(productData.envio, productData.producto.IdUsuarioComprador);
                 if (idEnvio != 0)
                 {
                     await UpdateUnitsProduct(productData.producto.IdProducto, productData.producto.UnidadesCompradas);
@@ -402,24 +501,24 @@ namespace SEI_APP.Controllers
             return result;
         }
 
-        public async Task<int> saveVentasProductos(ProductsDTOBuy.Producto productInfo, string idUser)
+        public async Task<int> saveVentasProductos(ProductsDTOBuy.Producto productInfo)
         {
             var idVentasProductos = 0;
             try
             {
-                var valorUnidad = await contextDB.Producto.Where(x => x.IdProducto == productInfo.IdProducto).Select(x => x.CostoProducto).FirstOrDefaultAsync();
+                var prodInfo = await contextDB.Producto.Where(x => x.IdProducto == productInfo.IdProducto).FirstOrDefaultAsync();
                 var venta = new VentasProductos
                 {
                   UnidadesCompradas = productInfo.UnidadesCompradas,
-                  ValorPorUnidad = (float)valorUnidad,
-                  ValorTotal = (float)valorUnidad * productInfo.UnidadesCompradas,
+                  ValorPorUnidad = (float)prodInfo.CostoProducto,
+                  ValorTotal = (float)prodInfo.CostoProducto * productInfo.UnidadesCompradas,
                   FechaCreacion = DateTime.Now,
                   FechaModificacion = null,
                   UsuarioModificacion = null,
-                  UsuarioCreacion = idUser,
+                  UsuarioCreacion = prodInfo.UsuarioCreacion,
                   IdProducto = productInfo.IdProducto,
-                  IdUsuarioComprador = idUser,
-                  IdUsuarioVendedor = idUser,
+                  IdUsuarioComprador = productInfo.IdUsuarioComprador,
+                  IdUsuarioVendedor = prodInfo.UsuarioCreacion,
                   IdTipoPago = productInfo.IdTipoPago,
                   IdEstadoVenta = 3
                 };
@@ -449,7 +548,6 @@ namespace SEI_APP.Controllers
                   CorreoElectronico = envioInfo.CorreoElectronico,
                   DireccionEnvio = envioInfo.DireccionEnvio,
                   DatosAdicionales = envioInfo.DatosAdicionales,
-                  EnvioGratis = envioInfo.EnvioGratis,
                   FechaCreacion = DateTime.Now,
                   FechaModificacion = null,
                   UsuarioModificacion = null,
@@ -477,6 +575,9 @@ namespace SEI_APP.Controllers
             public async Task<JsonResult> RegisterProduct([FromBody] ProductsDTO productData)
             {
                 JsonResult result = new JsonResult(productData);
+
+                try
+                {
                 if (productData.localizacion == null)
                 {
                     result.ContentType = "application/json";
@@ -484,20 +585,16 @@ namespace SEI_APP.Controllers
 
                     return result;
                 }
-
-                try
-                {
                     var idUser = await contextDB.Users.FirstOrDefaultAsync();
                     var idLocalization = await saveLocalization(productData.localizacion);
                     var idCharacterizationProduct = await saveCharacterizationProduct(productData.caracterizacion);
-                    //var saveImages = SaveImages(productData.producto.Imagen);
                     var product = new Producto
                     {
                         Descripcion = productData.producto.Descripcion,
                         NombreProducto = productData.producto.NombreProducto,
                         FechaModificacion = null,
                         UsuarioModificacion = null,
-                        UsuarioCreacion = null,
+                        UsuarioCreacion = productData.producto.IdUsuario,
                         FechaCreacion = DateTime.Now,
                         UnidadesProducto = productData.producto.Unidades,
                         CostoProducto = productData.producto.CostoProducto,
@@ -528,33 +625,6 @@ namespace SEI_APP.Controllers
                 return result;
             }
 
-        //public async Task<string> SaveImages(string imagePath)
-        //{
-        //    var result = "";
-        //    try
-        //    {   
-        //        Account account = new Account(
-        //          "ddsbfi1l5",
-        //          "446553946999364",
-        //          "HbxJ7l2yjGjfoATI3dObn3Jk6Jo");
-
-        //        Cloudinary cloudinary = new Cloudinary(account);
-        //        var uploadParams = new ImageUploadParams()
-        //        {
-        //            File = new FileDescription(@imagePath),
-        //            PublicId = "olympic_flag"
-        //        };
-        //        var uploadResult = cloudinary.Upload(uploadParams);
-        //        result = uploadResult.Url.ToString();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        var err = ex.Message;
-        //        throw;
-        //    }
-
-        //    return result;
-        //}
             public async Task<int> saveCharacterizationProduct(ProductsDTO.Characterization CharacterizationInfo)
             {
                 var idCharacterizationProduct = 0;
@@ -571,6 +641,7 @@ namespace SEI_APP.Controllers
                         FechaModificacion = null,
                         UsuarioModificacion = null,
                         UsuarioCreacion = null,
+                        EnvioGratis = CharacterizationInfo.EnvioGratis,
                         IdTipoMaterialProducto = CharacterizationInfo.IdTipoMaterialProducto,
                         IdTipoGarantiaProducto = CharacterizationInfo.IdTipoGarantiaProducto
                     };
@@ -603,8 +674,11 @@ namespace SEI_APP.Controllers
                         UsuarioModificacion = null,
                         UsuarioCreacion = null,
                         IdMunicipio = localizationInfo.IdMunicipio,
-                        IdBarrio = localizationInfo.IdBarrio
-
+                        IdBarrio = localizationInfo.IdBarrio,
+                        Telefono = localizationInfo.Telefono,
+                        TelefonoOpc = localizationInfo.TelefonOpc,
+                        Email = localizationInfo.Email,
+                        WebSite= localizationInfo.WebSite
                     };
 
                     var saveL = contextDB.Localizacion.Add(Localization);

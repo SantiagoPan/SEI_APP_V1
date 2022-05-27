@@ -11,6 +11,7 @@ namespace SEI_APP.Areas.Identity.Data
         public int IdAdjuntosVentasServicios { get; set; }
         public string NombreDocumento { get; set; }
         public string Documento { get; set; }
+        public int Activo { get; set; }
         public DateTime? FechaCreacion { get; set; }
         public DateTime? FechaModificacion { get; set; }
         public string UsuarioModificacion { get; set; }
