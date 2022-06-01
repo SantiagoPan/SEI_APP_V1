@@ -25,7 +25,6 @@ import { cilSearch, cilLockLocked, cilUser, cilPhone, cilAddressBook, cilBirthda
 
 function Billing(props) {
   const [infoBank, setDataBank] = useState([]);
-
   const GetInfoBank = async () => {
     var infoUser = JSON.parse(localStorage.getItem('myData'));
     axios
@@ -43,27 +42,19 @@ function Billing(props) {
   }, [])
 
   return (
-
     <div className="bg-light min-vh-10 d-flex flex-row align-items-center">
       <CContainer className="px-50">
-        <CRow xs={{ gutterX: 3 }}>
-          <CCol>
-          </CCol>
-          <CCard style={{ width: '18rem' }}>
-            <CCardBody>
-              <div className="d-grid gap-2">
-                <a href="#/registerBank">
-                  <CButton color="success" type="submit" size="lg" >Agregar Cuenta Bancaria</CButton>
-                </a>
-              </div>
-            </CCardBody>
-          </CCard>
-
-          <CCard style={{ width: '18rem' }}>
+        <CCard>
+          <CCardBody>
+            <div className="d-grid gap-2">
+              <a href="#/registerBank">
+                <CButton color="success" className="agregar" type="submit" size="lg" >Editar Cuenta Bancaria</CButton>
+              </a>
+            </div>
             <div className="row">
               {infoBank &&
                 infoBank.map((account) => (
-                  <CCard style={{ width: '18rem' }} key={account.id}>
+                  <CCard style={{ width: '24rem' }} key={account.id}>
                     <CCardBody>
                       <CCardTitle> Cuenta Bancaria</CCardTitle>
                       <br></br>
@@ -74,12 +65,13 @@ function Billing(props) {
                   </CCard>
                 ))}
             </div>
-          </CCard>
 
-
-
+          </CCardBody>
+        </CCard>
+        <CRow>
         </CRow>
-      </CContainer>
+
+         </CContainer>
     </div>
 
   )

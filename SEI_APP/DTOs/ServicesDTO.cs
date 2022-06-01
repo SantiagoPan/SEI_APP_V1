@@ -104,6 +104,8 @@ namespace SEI_APP.DTOs
             public string MotivoFinalizacion { get; set; }
             public double CostoServicio { get; set; }
             public string Calificacion { get; set; }
+            public string FechaPublicacion { get; set; }
+            public string EstadoPublicacion { get; set; }
             public string AplicaConvenio { get; set; }
             public string NombrePrestador { get; set; }
             public string Experiencia { get; set; }

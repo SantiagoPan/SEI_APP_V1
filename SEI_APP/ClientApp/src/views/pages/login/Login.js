@@ -92,11 +92,11 @@ function Login1(props) {
                           Entrar
                         </CButton>
                       </CCol>
-                      <CCol xs={6} className="text-right">
-                        <CButton color="link" className="px-0">
-                          Restablecer Contraseña
-                        </CButton>
-                      </CCol>
+                      {/*<CCol xs={6} className="text-right">*/}
+                      {/*  <CButton color="link" className="px-0">*/}
+                      {/*    Restablecer Contraseña*/}
+                      {/*  </CButton>*/}
+                      {/*</CCol>*/}
                     </CRow>
                   </CForm>
                 </CCardBody>

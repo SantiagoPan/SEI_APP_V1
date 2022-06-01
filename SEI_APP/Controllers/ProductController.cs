@@ -342,6 +342,75 @@ namespace SEI_APP.Controllers
             }
         }
 
+        [HttpGet("getProductsPostedByUser")]
+        public async Task<JsonResult> GetProducts(string idUser)
+        {
+            string strSearch = string.Empty;
+            JsonResult result = new JsonResult(strSearch);
+            try
+            {
+                var products = new List<Producto>();
+                var productsList = new List<ProductsDTOResponse>();
+                products = await contextDB.Producto.Where(x=>x.UsuarioCreacion == idUser).ToListAsync();
+                foreach (var item in products)
+                {
+                    var productInfo = new ProductsDTOResponse();
+                    var prod = new ProductsDTOResponse.Producto();
+                    var loc = new ProductsDTOResponse.Localizacion();
+                    var cac = new ProductsDTOResponse.Caracteristicas();
+                    var cal = 0;
+                    prod.IdProducto = item.IdProducto;
+                    prod.CostoProducto = item.CostoProducto;
+                    prod.NombreProducto = item.NombreProducto;
+                    prod.Descripcion = item.Descripcion;
+                    prod.EstadoProductoServicio = item.IdEstadoProductoServicio;
+                    cac = await GetInfoCaracteristicas(item.IdCaracterizacionProducto);
+                    loc = await GetInfoLocalizacion(item.IdLocalizacion);
+                    cal = await GetInfoCalificacion(item.IdProducto);
+                    string stars = "";
+                    if (cal == 0)
+                    {
+                        stars = "Sin calificaciones.";
+                    }
+                    else
+                    {
+                        for (int i = 0; i < cal; i++)
+                        {
+                            stars += "★ ";
+                        }
+                    }
+
+                    prod.EstrellasCalificacion = stars;
+                    prod.NombreTipoProducto = await contextDB.TipoProducto.Where(x => x.IdTipoProducto == item.IdTipoProducto).Select(x => x.NombreTiipoProducto).FirstOrDefaultAsync();
+                    prod.Localizacion = loc;
+                    prod.Caracteristicas = cac;
+                    prod.Calificacion = cal;
+                    prod.Unidades = item.UnidadesProducto;
+                    prod.Imagen = item.Imagen;
+                    prod.FechaPublicacion = item.FechaCreacion.ToString();
+                    prod.EstadoPublicacion = await contextDB.EstadoProductoServicio.Where(x => x.IdEstadoProductoServicio == item.IdEstadoProductoServicio).Select(x => x.Nombre).FirstOrDefaultAsync();
+                    productInfo.producto = prod;
+                    productsList.Add(productInfo);
+                }
+
+                result.Value = productsList;
+                result.ContentType = "application/json";
+                result.StatusCode = 200;
+
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                result.Value = err;
+            }
+            result.ContentType = "application/json";
+            result.StatusCode = 400;
+
+            return result;
+        }
+
         [HttpGet("getProducts")]
         public async Task<JsonResult> GetProducts()
         {

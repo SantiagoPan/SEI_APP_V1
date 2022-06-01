@@ -155,39 +155,6 @@ namespace SEI_APP.Controllers
             }
         }
 
-        //[HttpGet("getEstadoVenta")]
-        //public async Task<ActionResult> GetEstadoVenta()
-        //{
-        //    try
-        //    {
-        //        var estadoVentas = new List<EstadoVenta>();
-        //        JsonResult result = new JsonResult(estadoVentas);
-        //        estadoVentas = await contextDB.EstadoVenta.ToListAsync();
-        //        if (estadoVentas.Count == 0)
-        //        {
-        //            result.Value = null;
-        //            result.ContentType = "application/json";
-        //            result.StatusCode = 200;
-        //            return NoContent();
-        //        }
-        //        var optionSelect = new EstadoVenta();
-        //        int maxId = estadoVentas.Max(u => u.IdEstadoVenta);
-        //        optionSelect.IdEstadoVenta = maxId + 1;
-        //        optionSelect.Nombre = "Seleccione";
-        //        estadoVentas.Add(optionSelect);
-        //        List<EstadoVenta> SortedList = estadoVentas.OrderByDescending(o => o.IdEstadoVenta).ToList();
-        //        result.Value = SortedList;
-        //        result.ContentType = "application/json";
-        //        result.StatusCode = 200;
-
-        //        return result;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        var err = ex.Message;
-        //        throw;
-        //    }
-        //}
 
         [HttpGet("getMotivoFinalizacion")]
         public async Task<ActionResult> GetMotivoFinalizacion()
@@ -450,6 +417,72 @@ namespace SEI_APP.Controllers
             }
             result.ContentType = "application/json";
             result.StatusCode = 400;
+            return result;
+        }
+        [HttpGet("getServicesPostedByUser")]
+        public async Task<JsonResult> GetServicesPostedByUser(string idUser)
+        {
+            string strSearch = string.Empty;
+            JsonResult result = new JsonResult(strSearch);
+            try
+            {
+                var services = new List<Servicio>();
+                var servicesList = new List<ServicesDTOResponse>();
+                services = await contextDB.Servicio.Where(x=>x.UsuarioCreacion == idUser).ToListAsync();
+                foreach (var item in services)
+                {
+                    var serviceInfo = new ServicesDTOResponse();
+                    var serv = new ServicesDTOResponse.Service();
+                    var loc = new ServicesDTOResponse.Localizacion();
+                    var cac = new ServicesDTOResponse.Caracteristicas();
+                    int cal = 0;
+                    serv.IdServicio = item.IdServicio;
+                    serv.CostoServicio = item.CostoServicio;
+                    serv.NombreServicio = item.NombreServicio;
+                    serv.Descripcion = item.Descripcion;
+                    serv.IdEstadoProductoServicio = item.IdEstadoProductoServicio;
+                    cac = await GetInfoCaracteristicas(item.IdCaracterizacionServicio);
+                    loc = await GetInfoLocalizacion(item.IdLocalizacion);
+                    cal = await GetInfoCalificacion(item.IdServicio);
+                    string stars = "";
+                    if (cal == 0)
+                    {
+                        stars = "Sin calificaciones.";
+                    }
+                    else
+                    {
+                        for (int i = 0; i < cal; i++)
+                        {
+                            stars += "★ ";
+                        }
+                    }
+                    serv.AplicaConvenio = item.AplicaConvenio == true ? "Si" : "No";
+                    serv.Calificacion = stars;
+                    serv.TipoServicio = await contextDB.TipoServicio.Where(x => x.IdTipoServicio == item.IdTipoServicio).Select(x => x.Nombre).FirstOrDefaultAsync();
+                    serv.localizacion = loc;
+                    serv.Caracteristicas = cac;
+                    serv.Imagen = item.Imagen;
+                    serv.FechaPublicacion = item.FechaCreacion.ToString();
+                    serv.EstadoPublicacion = await contextDB.EstadoProductoServicio.Where(x => x.IdEstadoProductoServicio == item.IdEstadoProductoServicio).Select(x => x.Nombre).FirstOrDefaultAsync();
+                    serviceInfo.servicio = serv;
+                    servicesList.Add(serviceInfo);
+                }
+
+                result.Value = servicesList;
+                result.ContentType = "application/json";
+                result.StatusCode = 200;
+
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                result.Value = err;
+            }
+            result.ContentType = "application/json";
+            result.StatusCode = 400;
+
             return result;
         }
 

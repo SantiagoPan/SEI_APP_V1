@@ -73,7 +73,6 @@ function Message(props) {
     console.log(IdMensajesVentaServicio);
     respuestaVenta.IdMensajesVentaServicio = IdMensajesVentaServicio;
     setVisibleQualify(!visibleQualify)
-
   };
 
   const SendResponseSale = () => {

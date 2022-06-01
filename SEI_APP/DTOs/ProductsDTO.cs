@@ -113,6 +113,8 @@ namespace SEI_APP.DTOs
             public string TipoPago { get; set; }
             public string NombreVendedor { get; set; }
             public string FechaCompra { get; set; }
+            public string FechaPublicacion { get; set; }
+            public string EstadoPublicacion { get; set; }
             public string NombreTipoProducto { get; set; }
             public string Condicion { get; set; }
             public string Marca { get; set; }

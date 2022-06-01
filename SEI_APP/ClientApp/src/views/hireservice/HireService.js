@@ -31,9 +31,11 @@ import { cilCart, cilSearch, cilZoom } from '@coreui/icons'
 function HireService1(props) {
   const [services, setDataServices] = useState([]);
   const [servicesFiltered, setServicesFiltered] = useState([]);
-  const [tipoPago, setTipoPago] = useState([]);
-  const [visibleHire, setVisibleHire] = useState(false)
   const [inputText, setInputText] = useState("");
+  const [tipoPago, setTipoPago] = useState([]);
+  const [serviceDetModal, setServiceDetModal] = useState([]);
+  const [serviceBuyModal, setServiceBuyModal] = useState([]);
+  const [visibleHire, setVisibleHire] = useState(false)
   const [dataContrato, setDataContrato] = useState({
     IdUser: '',
     IdServicio: 0,
@@ -77,16 +79,6 @@ function HireService1(props) {
     setDataContrato({ ...dataContrato, [e.target.name]: e.target.value });
   }
 
-  const filtrar = (terminoBusqueda) => {
-    var resultadosBusqueda = products.filter((elemento) => {
-      if (elemento.nombreProducto.toString().toLowerCase().includes(terminoBusqueda.toLowerCase())
-        | elemento.nombreProducto.toString().toLowerCase().includes(terminoBusqueda.toLowerCase())
-      ) {
-        return elemento;
-      }
-    });
-    setUsuarios(resultadosBusqueda);
-  }
 
   const HireService = (e) => {
     var infoUser = JSON.parse(localStorage.getItem('myData'));
@@ -113,20 +105,66 @@ function HireService1(props) {
           alert('No registrado');
       })
   };
-  const showModalHire = () => {
-    setVisibleHire(!visibleHire)
-  };
+
   const handleChange = e => {
     setBusqueda(e.target.value);
     filtrar(e.target.value);
   }
 
   let inputHandler = (e) => {
-    //convert input text to lower case
     var lowerCase = e.target.value.toLowerCase();
     setInputText(lowerCase);
-    
   };
+
+  const showModalHire = (idServicio) => {
+    let serviceBuyModal = services.filter(v => v.servicio.idServicio == idServicio);
+    setServiceBuyModal(serviceBuyModal)
+    setVisibleHire(!visibleHire)
+  };
+
+  let modalBuyService = serviceBuyModal.length > 0
+    && serviceBuyModal.map((item, i) => {
+      return (
+        <CModal visible={visibleHire} onClose={() => setVisibleHire(false)}>
+          <CModalHeader onClose={() => setVisibleHire(false)}>
+            <CModalTitle>Datos del servicio - {item.servicio.nombreServicio}</CModalTitle>
+          </CModalHeader>
+          <CCard className="mx-4">
+            <CCardBody className="p-4">
+              <CForm onSubmit={HireService} className="user">
+                <CFormInput type="hidden" value={dataContrato.IdServicio = item.servicio.idServicio} className="form-control form-control-sm" name="IdServicio" id="IdServicio" />
+                <CRow className="mb-3">
+                  <CCardSubtitle><strong>Descripción</strong> </CCardSubtitle>
+                  <CCardText>{item.servicio.descripcion}</CCardText>
+                  <CCardText><strong>Calificación: </strong>{item.servicio.calificacion}</CCardText>
+                  <CCardText><strong>Categoría: </strong>{item.servicio.tipoServicio}</CCardText>
+                  <CCardText><strong>Experiencia: </strong>{item.servicio.caracteristicas.experiencia}</CCardText>
+                  <CCardText><strong>Incluye: </strong>{item.servicio.caracteristicas.incluye}</CCardText>
+                  <CCardText><strong>No Incluye: </strong>{item.servicio.caracteristicas.noIncluye}</CCardText>
+                  <CAlert color="info">Datos Del Prestador</CAlert>
+                  <CCardText><strong>Nombre: </strong>{item.servicio.caracteristicas.nombre}</CCardText>
+                  <CCardText><strong>Teléfono: </strong>{item.servicio.caracteristicas.telefono}</CCardText>
+                  <CCardText><strong>Ubicación: </strong>{item.servicio.localizacion.ciudad}, {item.servicio.localizacion.departmento} <b> Barrio: </b> {item.servicio.localizacion.barrio}</CCardText>
+                  {item.servicio.aplicaConvenio == "Si" ? (
+                    <CCardText><strong>Tipo de pago: </strong> A convenir con el prestador</CCardText>
+                  ) : (
+                      <CCardText><strong>Precio: </strong>{item.servicio.costoServicio}</CCardText>
+                  )}
+
+                </CRow>
+
+                <CCol md={6}>
+                  <CButton type="submit" color="success">Contratar</CButton>
+                </CCol>
+              </CForm>
+            </CCardBody>
+          </CCard>
+          <CModalFooter>
+          </CModalFooter>
+        </CModal>
+      )
+    }, this);
+
   const searchService = () => {
     let servicesFilter = services.filter(v => v.servicio.nombreServicio.toLowerCase().includes(inputText));
     if (inputText != "") {
@@ -212,7 +250,6 @@ function HireService1(props) {
             <CCard className="mx-4">
               <CCardBody className="p-4">
                 <h2>Servicios Disponibles</h2>
-                <CForm className="user">
                   <div>
                     <CInputGroup className="input-prepend">
                       <CInputGroupText>
@@ -222,7 +259,6 @@ function HireService1(props) {
                       <CButton color="primary" onClick={searchService} >Buscar Servicio</CButton>
                     </CInputGroup>
                   </div>
-                </CForm>
                 <br>
                 </br>
                 <div className="servicesFilter">
@@ -245,52 +281,55 @@ function HireService1(props) {
                             <CCardText><strong>Precio: </strong>{servicio.servicio.costoServicio}</CCardText>
                           )}
                           <div className="d-grid gap-2 d-md-block">
-                            <CButton href="" color="primary" onClick={showModalHire} key={servicio.servicio.idServicio}><CIcon icon={cilCart} />Contratar </CButton>
+                            <CButton href="" color="primary" onClick={() => showModalHire(servicio.servicio.idServicio)} key={servicio.servicio.idServicio}><CIcon icon={cilCart} />Contratar </CButton>
                           </div>
                         </CCardBody>
                       </CCard>
                     ))}
 
-                  {services &&
-                    services.map((servicio) => (
-                      <CModal visible={visibleHire} onClose={() => setVisibleHire(false)}>
-                        <CModalHeader onClose={() => setVisibleHire(false)}>
-                          <CModalTitle>Datos del servicio - {servicio.servicio.nombreServicio}</CModalTitle>
-                        </CModalHeader>
-                        <CCard className="mx-4">
-                          <CCardBody className="p-4">
-                            <CForm onSubmit={HireService} className="user">
-                              <CFormInput type="hidden" value={dataContrato.IdServicio = servicio.servicio.idServicio} className="form-control form-control-sm" name="IdServicio" id="IdServicio" />
-                              <CRow className="mb-3">
-                                <CCardSubtitle><strong>Descripción</strong> </CCardSubtitle>
-                                <CCardText>{servicio.servicio.descripcion}</CCardText>
-                                <CCardText><strong>Calificación: </strong>{servicio.servicio.calificacion}</CCardText>
-                                <CCardText><strong>Categoría: </strong>{servicio.servicio.tipoServicio}</CCardText>
-                                <CCardText><strong>Experiencia: </strong>{servicio.servicio.caracteristicas.experiencia}</CCardText>
-                                <CCardText><strong>Incluye: </strong>{servicio.servicio.caracteristicas.incluye}</CCardText>
-                                <CCardText><strong>No Incluye: </strong>{servicio.servicio.caracteristicas.noIncluye}</CCardText>
-                                <CAlert color="info">Datos Del Prestador</CAlert>
-                                <CCardText><strong>Nombre: </strong>{servicio.servicio.caracteristicas.nombre}</CCardText>
-                                <CCardText><strong>Teléfono: </strong>{servicio.servicio.caracteristicas.telefono}</CCardText>
-                                <CCardText><strong>Ubicación: </strong>{servicio.servicio.localizacion.ciudad}, {servicio.servicio.localizacion.departmento} <b> Barrio: </b> {servicio.servicio.localizacion.barrio}</CCardText>
-                                {servicio.servicio.aplicaConvenio == "Si" ? (
-                                  <CCardText><strong>Tipo de pago: </strong> A convenir con el prestador</CCardText>
-                                ) : (
-                                    <CCardText><strong>Precio: </strong>{servicio.servicio.costoServicio}</CCardText>
-                                )}
+                  {/*{services &&*/}
+                  {/*  services.map((servicio) => (*/}
+                  {/*    <CModal visible={visibleHire} onClose={() => setVisibleHire(false)}>*/}
+                  {/*      <CModalHeader onClose={() => setVisibleHire(false)}>*/}
+                  {/*        <CModalTitle>Datos del servicio - {servicio.servicio.nombreServicio}</CModalTitle>*/}
+                  {/*      </CModalHeader>*/}
+                  {/*      <CCard className="mx-4">*/}
+                  {/*        <CCardBody className="p-4">*/}
+                  {/*          <CForm onSubmit={HireService} className="user">*/}
+                  {/*            <CFormInput type="hidden" value={dataContrato.IdServicio = servicio.servicio.idServicio} className="form-control form-control-sm" name="IdServicio" id="IdServicio" />*/}
+                  {/*            <CRow className="mb-3">*/}
+                  {/*              <CCardSubtitle><strong>Descripción</strong> </CCardSubtitle>*/}
+                  {/*              <CCardText>{servicio.servicio.descripcion}</CCardText>*/}
+                  {/*              <CCardText><strong>Calificación: </strong>{servicio.servicio.calificacion}</CCardText>*/}
+                  {/*              <CCardText><strong>Categoría: </strong>{servicio.servicio.tipoServicio}</CCardText>*/}
+                  {/*              <CCardText><strong>Experiencia: </strong>{servicio.servicio.caracteristicas.experiencia}</CCardText>*/}
+                  {/*              <CCardText><strong>Incluye: </strong>{servicio.servicio.caracteristicas.incluye}</CCardText>*/}
+                  {/*              <CCardText><strong>No Incluye: </strong>{servicio.servicio.caracteristicas.noIncluye}</CCardText>*/}
+                  {/*              <CAlert color="info">Datos Del Prestador</CAlert>*/}
+                  {/*              <CCardText><strong>Nombre: </strong>{servicio.servicio.caracteristicas.nombre}</CCardText>*/}
+                  {/*              <CCardText><strong>Teléfono: </strong>{servicio.servicio.caracteristicas.telefono}</CCardText>*/}
+                  {/*              <CCardText><strong>Ubicación: </strong>{servicio.servicio.localizacion.ciudad}, {servicio.servicio.localizacion.departmento} <b> Barrio: </b> {servicio.servicio.localizacion.barrio}</CCardText>*/}
+                  {/*              {servicio.servicio.aplicaConvenio == "Si" ? (*/}
+                  {/*                <CCardText><strong>Tipo de pago: </strong> A convenir con el prestador</CCardText>*/}
+                  {/*              ) : (*/}
+                  {/*                  <CCardText><strong>Precio: </strong>{servicio.servicio.costoServicio}</CCardText>*/}
+                  {/*              )}*/}
                                 
-                              </CRow>
+                  {/*            </CRow>*/}
 
-                              <CCol md={6}>
-                                <CButton type="submit" color="success">Contratar</CButton>
-                              </CCol>
-                            </CForm>
-                          </CCardBody>
-                        </CCard>
-                        <CModalFooter>
-                        </CModalFooter>
-                      </CModal>
-                    ))}
+                  {/*            <CCol md={6}>*/}
+                  {/*              <CButton type="submit" color="success">Contratar</CButton>*/}
+                  {/*            </CCol>*/}
+                  {/*          </CForm>*/}
+                  {/*        </CCardBody>*/}
+                  {/*      </CCard>*/}
+                  {/*      <CModalFooter>*/}
+                  {/*      </CModalFooter>*/}
+                  {/*    </CModal>*/}
+                  {/*  ))}*/}
+                    <div>
+                      {modalBuyService}
+                    </div>
                   </div>
                 </div>
               </CCardBody>

@@ -61,7 +61,7 @@ function RegisterBank1(props) {
                   <CForm onSubmit={SaveBank} className="user">
 
                     <h3>  <center> REGISTRO DE CUENTA BANCARIA </center> </h3>
-                    <fieldset> <p className="text-medium-emphasis">DATOS DE LA CUENTA</p>
+                    <fieldset> <p className="text-medium-emphasis"></p>
                       <CInputGroup className="mb-3">
                         <CInputGroupText>
                           <CIcon icon={cilBank} />
@@ -93,10 +93,9 @@ function RegisterBank1(props) {
                         <CFormInput placeholder="Numero De Cuenta" required value={bankInfo.NumberAccount} onChange={onChange} autoComplete="accountNumber" name="NumberAccount" id="NumberAccount" />
                       </CInputGroup>
                     </fieldset>
-
                     <div className="d-grid">
                       <CButton color="success" type="submit"> Guardar</CButton>
-                      <CButton color="primary" className="mt-3"> Cancelar</CButton>
+                      <CButton color="primary" href="#/billing" className="mt-3"> Cancelar</CButton>
                     </div>
                   </CForm>
                 </CCardBody>
