@@ -351,6 +351,7 @@ function SearchProduct1(props) {
       document.getElementsByClassName('allProducts')[0].style.visibility = 'hidden';
       setProductsFiltered(productsFilter);
     } else {
+      document.getElementsByClassName('allProducts')[0].style.visibility = 'visible';
       console.log("Sin resultados en la busqueda");
     }
   };
@@ -432,6 +433,7 @@ function SearchProduct1(props) {
                     </div>
                   </div>
                 </div>
+
               </CCardBody>
             </CCard>
           </CCol>

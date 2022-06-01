@@ -171,6 +171,7 @@ function HireService1(props) {
       document.getElementsByClassName('allServices')[0].style.visibility = 'hidden';
       setServicesFiltered(servicesFilter);
     } else {
+      document.getElementsByClassName('allServices')[0].style.visibility = 'visible';
       console.log("Sin resultados en la busqueda");
     }
   };
