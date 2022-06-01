@@ -6,7 +6,7 @@ namespace SEI_APP.Areas.Identity.Data
     public class EstadoProductoServicio
     {
         [Key]
-        public string IdEstadoProductoServicio { get; set; }
+        public int IdEstadoProductoServicio { get; set; }
         [Required]
         public int Activo{ get; set; }
         [Required]

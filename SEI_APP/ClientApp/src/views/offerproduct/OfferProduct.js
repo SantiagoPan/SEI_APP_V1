@@ -207,6 +207,7 @@ function OfferProduct1(props) {
       setDataLocalizacion({ ...dataLocalizacion, [e.target.name]: e.target.value });
       setDataCaracterizacion({ ...dataCaracterizacion, [e.target.name]: e.target.value });
   }
+
   let departamentosList = departamentos.length > 0
     && departamentos.map((item, i) => {
       return (
@@ -234,12 +235,14 @@ function OfferProduct1(props) {
         <option key={i} value={item.idTipoCategoriaProducto}>{item.nombre}</option>
       )
     }, this);
+
   let tipoMaterialList = tipoMaterial.length > 0
     && tipoMaterial.map((item, i) => {
       return (
         <option key={i} value={item.idTipoMaterialProducto}>{item.nombre}</option>
       )
     }, this);
+
   let categoriaProductoList = categoriaProducto.length > 0
     && categoriaProducto.map((item, i) => {
       return (

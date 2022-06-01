@@ -55,6 +55,69 @@ namespace SEI_APP.Controllers
                     throw;
                 }
             }
+        [HttpGet("getPostsById")]
+        public async Task<JsonResult> GetPostsById(string idUser)
+        {
+            string strSearch = string.Empty;
+            JsonResult result = new JsonResult(strSearch);
+            try
+            {
+                var servicios = new List<Servicio>();
+                var productos = new List<Producto>();
+                var publicaciones = new List<PostsDTO.Publicaciones>();
+
+                servicios = await contextDB.Servicio.Where(x => x.UsuarioCreacion == idUser).ToListAsync();
+                productos = await contextDB.Producto.Where(x => x.UsuarioCreacion == idUser).ToListAsync();
+                if (servicios.Count != 0)
+                {
+                    foreach (var service in servicios)
+                    {
+                        var postServ = new PostsDTO.Publicaciones();
+                        var serv = await contextDB.Servicio.Where(x => x.IdServicio == service.IdServicio).FirstOrDefaultAsync();
+                        postServ.Id = serv.IdServicio;
+                        postServ.Nombre = serv.NombreServicio;
+                        postServ.Precio = service.CostoServicio;
+                        postServ.FechaPublicacion = service.FechaCreacion.ToString();
+                        postServ.Tipo = "Servicio";
+                        postServ.Estado = await contextDB.EstadoProductoServicio.Where(x => x.IdEstadoProductoServicio == service.IdEstadoProductoServicio).Select(x => x.Nombre).FirstOrDefaultAsync();
+
+                        publicaciones.Add(postServ);
+                    }
+                }
+
+                if (productos.Count != 0)
+                {
+                    foreach (var product in productos)
+                    {
+                        var postProd = new PostsDTO.Publicaciones();
+                        var prod = await contextDB.Producto.Where(x => x.IdProducto == product.IdProducto).FirstOrDefaultAsync();
+                        postProd.Id = prod.IdProducto;
+                        postProd.Nombre = prod.NombreProducto;
+                        postProd.Precio = product.CostoProducto;
+                        postProd.FechaPublicacion = product.FechaCreacion.ToString();
+                        postProd.Tipo = "Producto";
+                        postProd.Estado = await contextDB.EstadoProductoServicio.Where(x => x.IdEstadoProductoServicio == product.IdEstadoProductoServicio).Select(x => x.Nombre).FirstOrDefaultAsync();
+
+                        publicaciones.Add(postProd);
+                    }
+                }
+                result.Value = publicaciones;
+                result.ContentType = "application/json";
+                result.StatusCode = 200;
+
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                result.Value = err;
+            }
+            result.ContentType = "application/json";
+            result.StatusCode = 400;
+
+            return result;
+        }
 
         [HttpGet("getProductsByUser")]
         public async Task<ActionResult> GetProductsByUser(string idUser)

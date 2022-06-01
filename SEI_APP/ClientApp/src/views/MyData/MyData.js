@@ -17,7 +17,8 @@ import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser, cilPhone, cilAddressBook, cilBirthdayCake } from '@coreui/icons'
 
 
-  function MyData(props) {
+function MyData(props) {
+  const [tipoDocumento, setTipoDocumento] = useState([]);
     const [userInfo, setUser] = useState({
       firstname: '',
       lastname: '',
@@ -31,7 +32,40 @@ import { cilLockLocked, cilUser, cilPhone, cilAddressBook, cilBirthdayCake } fro
       password: '',
       photo:''
     });
-    const apiUrl = "https://localhost:44342/users/register";
+
+    const GetTipoDocumento = async () => {
+      await axios.get("https://localhost:44342/users/getDocumentType")
+        .then(response => {
+          setTipoDocumento(response.data)
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+  const GetInfoUsuario = async () => {
+    var infoUser = JSON.parse(localStorage.getItem('myData'));
+    await axios.get("https://localhost:44342/users/getInfoUser?idUser=" + infoUser.idUser)
+      .then(response => {
+        setUser(response.data)
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+  useEffect(() => {
+    GetTipoDocumento();
+    GetInfoUsuario();
+  }, [])
+
+  let tipoDocumentoList = tipoDocumento.length > 0
+    && tipoDocumento.map((item, i) => {
+      return (
+        <option key={i} value={item.nombre}>{item.nombre}</option>
+      )
+    }, this);
+
+    const apiUrl = "https://localhost:44342/users/updateInfo";
     const MyData = (e) => {
       e.preventDefault();
       const data = {
@@ -66,23 +100,20 @@ import { cilLockLocked, cilUser, cilPhone, cilAddressBook, cilBirthdayCake } fro
       e.persist();
       setUser({ ...userInfo, [e.target.name]: e.target.value });
     }
-
-   
-
     return (
-      <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
+      <div className="bg-light min-vh-50 d-flex flex-row align-items-center">
         <CContainer>
           <CRow className="justify-content-center">
             <CCol md={9} lg={7} xl={6}>
               <CCard className="mx-4">
                 <CCardBody className="p-4">
                   <CForm onSubmit={MyData} className="user">
-                    <h2>MIS DATOS</h2>
+                    <h2>Mis Datos</h2>
                     <CInputGroup className="mb-3">
                       <CInputGroupText>
                         <CIcon icon={cilUser} />
                       </CInputGroupText>
-                      <CFormInput placeholder="Nombres" value={userInfo.firstname} onChange={onChange} autoComplete="firstname" name="firstname" id="firstname" />
+                      <CFormInput placeholder="Nombres" value={userInfo.firstName} onChange={onChange} autoComplete="firstname" name="firstname" id="firstname" />
                     </CInputGroup>
 
                     <CInputGroup className="mb-3">
@@ -96,18 +127,8 @@ import { cilLockLocked, cilUser, cilPhone, cilAddressBook, cilBirthdayCake } fro
                       <CInputGroupText>
                         <CIcon icon={cilUser} />
                       </CInputGroupText>
-                      <CFormInput placeholder="Nombre De Usuario" value={userInfo.username} onChange={onChange} autoComplete="username" name="username" id="username" />
-                    </CInputGroup>
-
-                    <CInputGroup className="mb-3">
-                      <CInputGroupText>
-                        <CIcon icon={cilUser} />
-                      </CInputGroupText>
                       <CFormSelect aria-label="Default select example" name="typedocument" id="typedocument">
-                        <option>Tipo De Documento</option>
-                        <option value="CC">CC</option>
-                        <option value="PASS">PASS</option>
-                        <option value="CE">CE</option>
+                        {tipoDocumentoList}
                       </CFormSelect>
                     </CInputGroup>
 
@@ -138,21 +159,8 @@ import { cilLockLocked, cilUser, cilPhone, cilAddressBook, cilBirthdayCake } fro
                       </CInputGroupText>
                       <CFormInput placeholder="Dirección" value={userInfo.address} onChange={onChange} autoComplete="address" name="address" id="address" />
                     </CInputGroup>
-
-                    <CInputGroup className="mb-3">
-                      <CInputGroupText>@</CInputGroupText>
-                      <CFormInput placeholder="Correo" value={userInfo.email} onChange={onChange} autoComplete="email" name="email" id="email" />
-                    </CInputGroup>
-
-                    <CInputGroup className="mb-3">
-                      <CInputGroupText>
-                        <CIcon icon={cilLockLocked} />
-                      </CInputGroupText>
-                      <CFormInput type="password" value={userInfo.password} onChange={onChange} placeholder="Contraseña" name="password" id="password" autoComplete="new-password" />
-                    </CInputGroup>
-
                     <div className="d-grid">
-                      <CButton color="success" type="submit" > Actualizar</CButton>
+                      <CButton color="success" type="submit" >Actualizar Datos</CButton>
                     </div>
                   </CForm>
                 </CCardBody>
@@ -160,15 +168,6 @@ import { cilLockLocked, cilUser, cilPhone, cilAddressBook, cilBirthdayCake } fro
             </CCol>
           </CRow>
         </CContainer>
-
-
-        {/*<CInputGroup className="icon icon-upload">*/}
-        {/*  <CFormInput type="images" value={userInfo.photo} name="images" id="images" />*/}
-        {/*</CInputGroup>*/}    
-          {/*<button type="submit"  >*/}
-          {/*  Enviar*/}
-          {/*</button>*/}
-        
       </div>
     )
 

@@ -171,6 +171,43 @@ namespace SEI_APP.Controllers
             }
         }
 
+        [HttpGet("getInfoUser")]
+        public async Task<ActionResult> GetInfoUser(string idUser)
+        {
+            try
+            {
+                var infoUser = new RegisterDto();
+                JsonResult result = new JsonResult(infoUser);
+                var userInfo = await contextDB.Users.Where(x => x.Id == idUser).FirstOrDefaultAsync();
+
+                if (userInfo == null)
+                {
+                    result.Value = null;
+                    result.ContentType = "application/json";
+                    result.StatusCode = 200;
+                    return NoContent();
+                }
+                infoUser.FirstName = userInfo.Name;
+                infoUser.Lastname = userInfo.Lastname;
+                infoUser.Address = userInfo.Address;
+                infoUser.Birthdate = userInfo.Birthdate.ToString();
+                infoUser.Document = userInfo.Document;
+                infoUser.Email = userInfo.Email;
+                infoUser.Phone = userInfo.Phone;
+                userInfo.DocumentType = userInfo.DocumentType;
+                
+                result.Value = infoUser;
+                result.ContentType = "application/json";
+                result.StatusCode = 200;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                throw;
+            }
+        }
+
         // crear el token
         private async Task<ResponseAuthDto> BuildToken(UserDto register, ResponseAuthDto response)
         {
@@ -210,17 +247,19 @@ namespace SEI_APP.Controllers
                     result.Value = null;
                     result.ContentType = "application/json";
                     result.StatusCode = 200;
+
                     return NoContent();
                 }
 
                 result.Value = documentTypes;
                 result.ContentType = "application/json";
                 result.StatusCode = 200;
+
                 return result;
             }
             catch (Exception ex)
             {
-                var erd = ex.Message;
+                var err = ex.Message;
                 throw;
             }
         }

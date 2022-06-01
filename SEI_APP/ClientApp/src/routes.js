@@ -5,6 +5,7 @@ const Message = React.lazy(() => import('./views/Message/Message'))
 const MyData = React.lazy(() => import('./views/MyData/MyData'))
 const MyOrders = React.lazy(() => import('./views/MyOrders/MyOrders'))
 const MySales = React.lazy(() => import('./views/MySales/MySales'))
+const MyPosts = React.lazy(() => import('./views/MyPosts/MyPosts'))
 const OfferService = React.lazy(() => import('./views/offerservice/OfferService'))
 const OfferProduct = React.lazy(() => import('./views/offerproduct/OfferProduct'))
 const HireService = React.lazy(() => import('./views/hireservice/HireService'))
@@ -38,7 +39,8 @@ const routes = [
   { path: '/MyOrders/MyOrders', name: 'MyOrders', element: MyData },
   { path: '/MySales', name: 'MySales', element: MySales, exact: true },
   { path: '/MySales/MySales', name: 'MySales', element: MySales },
-  
+  { path: '/MyPosts', name: 'MyPosts', element: MyPosts, exact: true },
+  { path: '/MyPosts/MyPosts', name: 'MyPosts', element: MyPosts },
 ]
 
 export default routes

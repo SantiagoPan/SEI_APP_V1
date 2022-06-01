@@ -171,8 +171,6 @@ function Message(props) {
                 <CModalFooter>
                 </CModalFooter>
               </CModal>
-
-
               <CCardBody className="p-4">
                 <h2>Mensajes De Mis Compras</h2>
               </CCardBody>
@@ -211,7 +209,6 @@ function Message(props) {
       </CContainer>
     </div>
   )
-
 }
 
 export default Message

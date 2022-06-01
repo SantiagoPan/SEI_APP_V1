@@ -239,15 +239,6 @@ function SearchProduct1(props) {
               <CCardBody className="p-4">
                 <CForm className="user">
                   <h2>Productos Disponibles</h2>
-                  {/*<div>*/}
-                  {/*  <CInputGroup className="input-prepend">*/}
-                  {/*    <CInputGroupText>*/}
-                  {/*      <CIcon icon={cilSearch} />*/}
-                  {/*    </CInputGroupText>*/}
-                  {/*    <CFormInput type="text" value={busqueda} id="strSearch" name="strSearch" onChange={handleChange} />*/}
-                  {/*    <CButton color="primary" type="submit">Buscar Producto</CButton>*/}
-                  {/*  </CInputGroup>*/}
-                  {/*</div>*/}
                 </CForm>
                 <br>
                 </br>
