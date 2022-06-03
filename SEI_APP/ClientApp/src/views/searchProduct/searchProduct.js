@@ -187,7 +187,6 @@ function SearchProduct1(props) {
     const apiUrl = "https://localhost:44342/product/buyProduct";
     axios.post(apiUrl, data)
       .then((result) => {
-        debugger;
         console.log(result.data);
         const serializedState = JSON.stringify(result.data.UserDetails);
         var a = localStorage.setItem('BuyProducts', serializedState);

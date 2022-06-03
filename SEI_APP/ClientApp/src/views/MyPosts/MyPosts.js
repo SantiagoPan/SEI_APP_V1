@@ -87,6 +87,30 @@ function MyPosts(props) {
     setVisibleDetService(!visibleDetService)
   };
 
+  const disableProduct = (idProducto, idEstado) => {
+    console.log("Actualizar a eliminar =", idProducto);
+    axios
+      .get("https://localhost:44342/product/updateStatusProduct?idProducto=" + idProducto + "&idEstadoProducto=" + idEstado)
+      .then(response => {
+        window.location.reload(true);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const disableService = (idServicio,idEstado) => {
+    console.log("Actualizar a eliminar =", idServicio);
+    axios
+      .get("https://localhost:44342/services/updateStatusService?idServicio=" + idServicio + "&idEstado=" + idEstado)
+      .then(response => {
+        window.location.reload(true);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  
   let modalInfoProduct = modalProduct.length > 0
     && modalProduct.map((producto, i) => {
       return (
@@ -185,14 +209,14 @@ function MyPosts(props) {
                             {postProduct.producto.estadoPublicacion == "ACTIVO" ? (
                             <CTableDataCell>
                                 <CTooltip content="Ver Detalles" placement="bottom"><CButton color="light" className="rounded-pill" type="button" onClick={() => showModalProductDetails(postProduct.producto.idProducto)}><CIcon icon={cilZoom} /></CButton></CTooltip>
-                              | <CTooltip content="Desactivar" placement="bottom"><CButton color="light" className="rounded-pill" type="button"><CIcon icon={cilToggleOn} /></CButton></CTooltip>
-                              | <CTooltip content="Eliminar" placement="bottom"><CButton color="light" className="rounded-pill" type="button"><CIcon icon={cilTrash}/></CButton></CTooltip>
+                                  | <CTooltip content="Desactivar" placement="bottom"><CButton color="light" className="rounded-pill" type="button" onClick={() => disableProduct(postProduct.producto.idProducto,0)}><CIcon icon={cilToggleOn} /></CButton></CTooltip>
+                                | <CTooltip content="Eliminar" placement="bottom"><CButton color="light" className="rounded-pill" type="button" onClick={() => disableProduct(postProduct.producto.idProducto,3)}><CIcon icon={cilTrash}/></CButton></CTooltip>
                              </CTableDataCell>
                           ) : (
                               <CTableDataCell>
                                   <CTooltip content="Ver Detalles" placement="bottom"><CButton color="light" className="rounded-pill" type="button" onClick={() => showModalProductDetails(postProduct.producto.idProducto)}><CIcon icon={cilZoom} /></CButton></CTooltip>
-                                | <CTooltip content="Activar" placement="bottom"><CButton color="light" className="rounded-pill" type="button"><CIcon icon={cilToggleOff} /></CButton></CTooltip>
-                                | <CTooltip content="Eliminar" placement="bottom"><CButton color="light" className="rounded-pill" type="button"><CIcon icon={cilTrash} className="x-2" /></CButton></CTooltip>
+                                  | <CTooltip content="Activar" placement="bottom"><CButton color="light" className="rounded-pill" type="button" onClick={() => disableProduct(postProduct.producto.idProducto,0)}><CIcon icon={cilToggleOff} /></CButton></CTooltip>
+                                  | <CTooltip content="Eliminar" placement="bottom"><CButton color="light" className="rounded-pill" type="button" onClick={() => disableProduct(postProduct.producto.idProducto,3)}><CIcon icon={cilTrash}/></CButton></CTooltip>
                              </CTableDataCell>
                           )}
                         </CTableRow>
@@ -230,14 +254,14 @@ function MyPosts(props) {
                             {postService.servicio.estadoPublicacion == "ACTIVO" ? (
                               <CTableDataCell>
                                 <CTooltip content="Ver Detalles" placement="bottom"><CButton color="light" className="rounded-pill" type="button" onClick={() => showModalServiceDetails(postService.servicio.idServicio)}><CIcon icon={cilZoom} /></CButton></CTooltip>
-                                | <CTooltip content="Desactivar" placement="bottom"><CButton color="light" className="rounded-pill" type="button"><CIcon icon={cilToggleOn} /></CButton></CTooltip>
-                                | <CTooltip content="Eliminar" placement="bottom"><CButton color="light" className="rounded-pill" type="button"><CIcon icon={cilTrash} /></CButton></CTooltip>
+                                | <CTooltip content="Desactivar" placement="bottom"><CButton color="light" className="rounded-pill" type="button" onClick={() => disableService(postService.servicio.idServicio,0)}><CIcon icon={cilToggleOn} /></CButton></CTooltip>
+                                | <CTooltip content="Eliminar" placement="bottom"><CButton color="light" className="rounded-pill" type="button" onClick={() => disableService(postService.servicio.idServicio,3)}><CIcon icon={cilTrash} /></CButton></CTooltip>
                               </CTableDataCell>
                             ) : (
                               <CTableDataCell>
                                   <CTooltip content="Ver Detalles" placement="bottom"><CButton color="light" className="rounded-pill" type="button" onClick={() => showModalServiceDetails(postService.servicio.idServicio)}><CIcon icon={cilZoom} /></CButton></CTooltip>
-                                | <CTooltip content="Activar" placement="bottom"><CButton color="light" className="rounded-pill" type="button"><CIcon icon={cilToggleOff} /></CButton></CTooltip>
-                                | <CTooltip content="Eliminar" placement="bottom"><CButton color="light" className="rounded-pill" type="button"><CIcon icon={cilTrash}/></CButton></CTooltip>
+                                  | <CTooltip content="Activar" placement="bottom"><CButton color="light" className="rounded-pill" type="button" onClick={() => disableService(postService.servicio.idServicio,0)}><CIcon icon={cilToggleOff} /></CButton></CTooltip>
+                                  | <CTooltip content="Eliminar" placement="bottom"><CButton color="light" className="rounded-pill" type="button" onClick={() => disableService(postService.servicio.idServicio,3)}><CIcon icon={cilTrash}/></CButton></CTooltip>
                               </CTableDataCell>
                             )}
                           </CTableRow>

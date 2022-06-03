@@ -24,6 +24,7 @@ import {
   CFormLabel,
   CFormTextarea,
   CModal,
+  CModalBody,
   CModalHeader,
   CModalFooter,
   CModalTitle,
@@ -369,8 +370,7 @@ const MyOrders = () => {
                         <CModalHeader onClose={() => setVisibleHire(false)}>
                           <CModalTitle>Contratar Servicio - {servicio.servicio.nombreServicio} </CModalTitle>
                         </CModalHeader>
-                        <CCard className="mx-4">
-                          <CCardBody className="p-4">
+                        <CModalBody>
                               <CRow className="mb-3">
                                 <CAlert color="info">Datos Del Prestador</CAlert>
                                 <br></br>
@@ -420,13 +420,12 @@ const MyOrders = () => {
                                 <CButton color="success" onClick={() => SendMessage(servicio.servicio.idVentaServicio)}>Enviar mensaje</CButton>
                               </CForm>
                             </CRow>
-                          </CCardBody>
-                        </CCard>
+                          </CModalBody>
                         <CModalFooter>
                           <CCol md={4}>
                             <CButton color="info" onClose={() => setVisibleHire(false)} onClick={hideModalHire}>Finalizar Servicio</CButton>
                           </CCol>
-                        </CModalFooter>
+                          </CModalFooter>
                       </CModal>
                     ))}
                   {services &&

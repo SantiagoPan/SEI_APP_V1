@@ -272,6 +272,52 @@ namespace SEI_APP.Controllers
             }
         }
 
+        [HttpGet("updateStatusProduct")]
+        public async Task<JsonResult> UpdateStatusProduct(int idProducto, int idEstadoProducto)
+        {
+            string strSearch = string.Empty;
+            JsonResult result = new JsonResult(strSearch);
+            try
+            {
+                var producto = await contextDB.Producto.Where(x => x.IdProducto == idProducto).FirstOrDefaultAsync();
+                if (idEstadoProducto == 3)
+                {
+                    producto.IdEstadoProductoServicio = 3;
+                    contextDB.SaveChanges();
+                    result.Value = "Registro Actualizado Correctamente";
+                    result.ContentType = "application/json";
+                    result.StatusCode = 200;
+
+                    return result;
+                }
+                if (producto.IdEstadoProductoServicio == 1)
+                {
+                    producto.IdEstadoProductoServicio = 2;
+                    contextDB.SaveChanges();
+                }
+                else
+                {
+                    producto.IdEstadoProductoServicio = 1;
+                    contextDB.SaveChanges();
+                }
+                result.Value = "Registro Actualizado Correctamente";
+                result.ContentType = "application/json";
+                result.StatusCode = 200;
+
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                result.Value = err;
+            }
+            result.ContentType = "application/json";
+            result.StatusCode = 400;
+
+            return result;
+        }
+
         [HttpGet("getProductCategory")]
         public async Task<ActionResult> GetProductCategory(int idTipoCategoriaProducto)
         {
@@ -351,7 +397,7 @@ namespace SEI_APP.Controllers
             {
                 var products = new List<Producto>();
                 var productsList = new List<ProductsDTOResponse>();
-                products = await contextDB.Producto.Where(x=>x.UsuarioCreacion == idUser).ToListAsync();
+                products = await contextDB.Producto.Where(x=>x.UsuarioCreacion == idUser && x.IdEstadoProductoServicio != 3).ToListAsync();
                 foreach (var item in products)
                 {
                     var productInfo = new ProductsDTOResponse();
@@ -421,7 +467,7 @@ namespace SEI_APP.Controllers
                 var products = new List<Producto>();
                 var productsList = new List<ProductsDTOResponse>();
                 var idUser = await contextDB.Users.FirstOrDefaultAsync();
-                products = await contextDB.Producto.ToListAsync();
+                products = await contextDB.Producto.Where(x=>x.IdEstadoProductoServicio == 1).ToListAsync();
                 foreach (var item in products)
                 {
                     var productInfo = new ProductsDTOResponse();

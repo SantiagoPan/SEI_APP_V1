@@ -419,6 +419,54 @@ namespace SEI_APP.Controllers
             result.StatusCode = 400;
             return result;
         }
+
+        [HttpGet("updateStatusService")]
+        public async Task<JsonResult> UpdateStatusService(int idServicio, int idEstado)
+        {
+            string strSearch = string.Empty;
+            JsonResult result = new JsonResult(strSearch);
+            try
+            {
+                var servicio = await contextDB.Servicio.Where(x => x.IdServicio == idServicio).FirstOrDefaultAsync();
+                if (idEstado== 3)
+                {
+                    servicio.IdEstadoProductoServicio = 3;
+                    contextDB.SaveChanges();
+
+                    result.Value = "Registro Actualizado Correctamente";
+                    result.ContentType = "application/json";
+                    result.StatusCode = 200;
+
+                    return result;
+                }
+                if (servicio.IdEstadoProductoServicio == 1)
+                {
+                    servicio.IdEstadoProductoServicio = 2;
+                    contextDB.SaveChanges();
+                }
+                else
+                {
+                    servicio.IdEstadoProductoServicio = 1;
+                    contextDB.SaveChanges();
+                }
+                result.Value = "Registro Actualizado Correctamente";
+                result.ContentType = "application/json";
+                result.StatusCode = 200;
+
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                var err = ex.Message;
+                result.Value = err;
+            }
+            result.ContentType = "application/json";
+            result.StatusCode = 400;
+
+            return result;
+        }
+
         [HttpGet("getServicesPostedByUser")]
         public async Task<JsonResult> GetServicesPostedByUser(string idUser)
         {
@@ -428,7 +476,7 @@ namespace SEI_APP.Controllers
             {
                 var services = new List<Servicio>();
                 var servicesList = new List<ServicesDTOResponse>();
-                services = await contextDB.Servicio.Where(x=>x.UsuarioCreacion == idUser).ToListAsync();
+                services = await contextDB.Servicio.Where(x=>x.UsuarioCreacion == idUser && x.IdEstadoProductoServicio != 3).ToListAsync();
                 foreach (var item in services)
                 {
                     var serviceInfo = new ServicesDTOResponse();
@@ -496,7 +544,7 @@ namespace SEI_APP.Controllers
                 var services = new List<Servicio>();
                 var servicesList = new List<ServicesDTOResponse>();
                 var idUser = await contextDB.Users.FirstOrDefaultAsync();
-                services = await contextDB.Servicio.ToListAsync();
+                services = await contextDB.Servicio.Where(x=>x.IdEstadoProductoServicio == 1).ToListAsync();
                 foreach (var item in services)
                 {
                     var serviceInfo = new ServicesDTOResponse();
