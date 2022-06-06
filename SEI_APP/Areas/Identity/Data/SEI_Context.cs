@@ -45,8 +45,7 @@ namespace SEI_APP.Areas.Identity.Data
         public DbSet<VentasProductos> VentasProductos { get; set; }
         public DbSet<AdjuntosVentasServicios> AdjuntosVentasServicios { get; set; }
         public DbSet<MensajesVentaServicio> MensajesVentaServicio { get; set; }
-
-
+        public DbSet<NotificacionMasiva> NotificacionMasiva { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)

@@ -49,7 +49,9 @@ namespace SEI_APP.Migrations
                     AccessFailedCount = table.Column<int>(type: "int", nullable: false),
                     Bank = table.Column<string>(type: "nvarchar(100)", nullable: true),
                     TypeAccount = table.Column<string>(type: "nvarchar(100)", nullable: true),
-                    NumberAccount = table.Column<string>(type: "nvarchar(100)", nullable: true)
+                    NumberAccount = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    Active = table.Column<bool>(type: "bit", nullable: false),
+                    IsAdmin = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -894,6 +896,19 @@ namespace SEI_APP.Migrations
             });
 
             migrationBuilder.CreateTable(
+            name: "NotificacionMasiva",
+            columns: table => new
+            {
+                IdNotificacionMasiva = table.Column<int>(type: "int", nullable: false).Annotation("SqlServer:Identity", "1, 1"),
+                Mensaje = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                FechaMensaje = table.Column<DateTime>(type: "datetime", nullable: false)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_IdNotificacionMasiva", x => x.IdNotificacionMasiva);
+            });
+
+            migrationBuilder.CreateTable(
             name: "VentasProductos",
             columns: table => new
             {
@@ -1102,6 +1117,8 @@ namespace SEI_APP.Migrations
 
             migrationBuilder.DropTable(
               name: "Barrio");
+            migrationBuilder.DropTable(
+              name: "NotificacionMasiva");
 
             migrationBuilder.DropTable(
               name: "TipoDocumentoIdentidad");

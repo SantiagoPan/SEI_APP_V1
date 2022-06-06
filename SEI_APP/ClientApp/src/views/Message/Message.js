@@ -38,6 +38,7 @@ function Message(props) {
   const [messagesSales, setMessagesSales] = useState([]);
   const [visibleQualify, setVisibleQualify] = useState(false);
   const [messagesBuys, setMessagesBuys] = useState([]);
+  const [notifications, setNotifications] = useState([]);
   const [respuestaVenta, setRespuestaVenta] = useState({
     IdUsuario: '',
     IdMensaje: 0,
@@ -45,6 +46,7 @@ function Message(props) {
     IdVentaServicio: 0,
     Respuesta: ''
   });
+  
   const GetMessagesSales = async () => {
     var infoUser = JSON.parse(localStorage.getItem('myData'));
     axios
@@ -63,6 +65,17 @@ function Message(props) {
       .get("https://localhost:44342/services/getMessagesBuysById?idUser=" + infoUser.idUser)
       .then(response => {
         setMessagesBuys(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  const GetNotifications = async () => {
+    axios
+      .get("https://localhost:44342/users/getNotificationAdmin")
+      .then(response => {
+        setNotifications(response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -101,12 +114,14 @@ function Message(props) {
 
   useEffect(() => {
     GetMessagesSales();
+    GetNotifications();
     GetMessagesBuys();
   }, [])
 
   return (
         <div className="bg-light min-vh-10 d-flex flex-row align-items-center">
       <CContainer>
+        <div>
         <CRow className="justify-content-center">
           <CCol md={9} lg={7} xl={12}>
             <CCard className="mx-4">
@@ -201,10 +216,40 @@ function Message(props) {
                     </CTableBody>
                   </CTable>
                 )}
+
+                <CCardBody className="p-4">
+                  <h2>Notificaciones Del Administrador</h2>
+                </CCardBody>
+                <div className="justify-content-center">
+                  {notifications.length == 0 ? (<h4>No tiense notificaciones</h4>) : (
+                    <CTable bordered>
+                      <CTableHead>
+                        <CTableRow>
+                          <CTableHeaderCell scope="col">#</CTableHeaderCell>
+                          <CTableHeaderCell scope="col">Mensaje</CTableHeaderCell>
+                          <CTableHeaderCell scope="col">Fecha Del Mensaje</CTableHeaderCell>
+                        </CTableRow>
+                      </CTableHead>
+                      <CTableBody>
+                        {notifications &&
+                          notifications.map((mensaje) => (
+                            <CTableRow>
+                              <CTableHeaderCell scope="row">{mensaje.idNotificacionMasiva}</CTableHeaderCell>
+                              <CTableDataCell>{mensaje.mensaje}</CTableDataCell>
+                              <CTableDataCell>{mensaje.fechaMensaje}</CTableDataCell>
+
+                            </CTableRow>
+                          ))}
+                      </CTableBody>
+                    </CTable>
+
+                  )}
+                </div>
               </div>
             </CCard>
           </CCol>
         </CRow>
+        </div>
       </CContainer>
     </div>
   )

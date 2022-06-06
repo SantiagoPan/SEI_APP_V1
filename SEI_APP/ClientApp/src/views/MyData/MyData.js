@@ -65,14 +65,17 @@ function MyData(props) {
       )
     }, this);
 
-    const apiUrl = "https://localhost:44342/users/updateInfo";
-    const MyData = (e) => {
-      e.preventDefault();
-      const data = {
-        firstname: userInfo.firstname,
+
+  const updateData = (e) => {
+    const apiUrl = "https://localhost:44342/users/updateInfoUser";
+    e.preventDefault();
+    var infoUser = JSON.parse(localStorage.getItem('myData'));
+    const data = {
+        idUser: infoUser.idUser,
+        firstname: userInfo.firstName,
         lastname: userInfo.lastname,
         username: userInfo.username,
-        typedocument: userInfo.typedocument,
+        documentType: userInfo.documentType,
         document: userInfo.document,
         birthdate: userInfo.birthdate,
         phone: userInfo.phone,
@@ -81,9 +84,9 @@ function MyData(props) {
         password: userInfo.password,
         photo:userInfo.photo
       };
+    console.log(data);
       axios.post(apiUrl, data)
         .then((result) => {
-          debugger;
           console.log(result.data);
           const serializedState = JSON.stringify(result.data.UserDetails);
           var a = localStorage.setItem('MyData', serializedState);
@@ -91,7 +94,7 @@ function MyData(props) {
           const user = result.data.token;
           console.log(user);
           if (result.status == 200)
-            window.location.href = '/Dashboard';
+            window.location.reload(true);
           else
             alert('No registrado');
         })
@@ -107,15 +110,14 @@ function MyData(props) {
             <CCol md={9} lg={7} xl={6}>
               <CCard className="mx-4">
                 <CCardBody className="p-4">
-                  <CForm onSubmit={MyData} className="user">
+                  <CForm onSubmit={updateData} className="user">
                     <h2>Mis Datos</h2>
                     <CInputGroup className="mb-3">
                       <CInputGroupText>
                         <CIcon icon={cilUser} />
                       </CInputGroupText>
-                      <CFormInput placeholder="Nombres" value={userInfo.firstName} onChange={onChange} autoComplete="firstname" name="firstname" id="firstname" />
+                      <CFormInput placeholder="Nombres" value={userInfo.firstName} onChange={onChange} autoComplete="firstName" name="firstName" id="firstname" />
                     </CInputGroup>
-
                     <CInputGroup className="mb-3">
                       <CInputGroupText>
                         <CIcon icon={cilUser} />
@@ -127,7 +129,7 @@ function MyData(props) {
                       <CInputGroupText>
                         <CIcon icon={cilUser} />
                       </CInputGroupText>
-                      <CFormSelect aria-label="Default select example" name="typedocument" id="typedocument">
+                      <CFormSelect aria-label="Default select example" onChange={onChange} value={userInfo.documentType} name="documentType" id="documentType">
                         {tipoDocumentoList}
                       </CFormSelect>
                     </CInputGroup>

@@ -5,7 +5,8 @@ namespace  SEI_APP.DTOs
 {
     public class RegisterDto
     {
-       
+        public string IdUser { get; set; }
+        public string State { get; set; }
         [Required]
         public string FirstName { get; set; }
         [Required]
@@ -36,6 +37,32 @@ namespace  SEI_APP.DTOs
             public string Bank { get; set; }
             public string TypeAccount { get; set; }
             public string NumberAccount { get; set; }
+        }
+        
+        public class UpdateInfoUser
+        {
+            public userInfo user { get; set; }
+            public class userInfo
+            {
+                public string IdUser { get; set; }
+                public string State { get; set; }
+                public string FirstName { get; set; }
+                public string Lastname { get; set; }
+                public string UserName { get; set; }
+                public string DocumentType { get; set; }
+                public string Document { get; set; }
+                public string Phone { get; set; }
+                public string Address { get; set; }
+                public string Birthdate { get; set; }
+                public string Email { get; set; }
+            }
+
+        }
+        public class RecoverPass
+        {
+            public string TipoDocumento { get; set; }
+            public string Documento { get; set; }
+            public string Email { get; set; }
         }
     }
 }

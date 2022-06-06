@@ -6,7 +6,8 @@ import {
   cilEnvelopeClosed,
   cilDescription,
   cilAddressBook,
-  cilStar,
+  cilPeople,
+  cilSend,
   cilCart,
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
@@ -47,6 +48,18 @@ const _nav = [
     name: 'Mis Datos',
     to: '/MyData',
     icon: <CIcon icon={cilAddressBook} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'Administrar Usuarios',
+    to: '/AdminUsers',
+    icon: <CIcon icon={cilPeople} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'Notificaciones Masivas',
+    to: '/MassiveNotification',
+    icon: <CIcon icon={cilSend} customClassName="nav-icon" />,
   },]
 
 export default _nav

@@ -13,7 +13,8 @@ const searchproduct = React.lazy(() => import('./views/searchProduct/searchProdu
 const Billing = React.lazy(() => import('./views/Billing/billing'))
 const registerBank = React.lazy(() => import('./views/registerBank/registerBank'))
 const post = React.lazy(() => import('./views/post/post'))
-
+const AdminUsers = React.lazy(() => import('./views/AdminUsers/AdminUsers'))
+const MassiveNotification = React.lazy(() => import('./views/MassiveNotification/MassiveNotification'))
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -41,6 +42,11 @@ const routes = [
   { path: '/MySales/MySales', name: 'MySales', element: MySales },
   { path: '/MyPosts', name: 'MyPosts', element: MyPosts, exact: true },
   { path: '/MyPosts/MyPosts', name: 'MyPosts', element: MyPosts },
+  { path: '/AdminUsers', name: 'AdminUsers', element: AdminUsers, exact: true },
+  { path: '/AdminUsers/AdminUsers', name: 'AdminUsers', element: AdminUsers },
+  { path: '/MassiveNotification', name: 'MassiveNotification', element: MassiveNotification, exact: true },
+  { path: '/MassiveNotification/MassiveNotification', name: 'MassiveNotification', element: MassiveNotification },
+  
 ]
 
 export default routes

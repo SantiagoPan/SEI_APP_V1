@@ -23,5 +23,7 @@ namespace SEI_APP.Models
         public string Bank { get; set; }
         public string TypeAccount { get; set; }
         public string NumberAccount { get; set; }
+        public bool Active { get; set; }
+        public bool IsAdmin { get; set; }
     }
 }
