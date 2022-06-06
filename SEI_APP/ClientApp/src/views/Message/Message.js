@@ -152,7 +152,7 @@ function Message(props) {
                              <CTableDataCell>{mensaje.respuesta}</CTableDataCell>
                             <CTableDataCell>{mensaje.fecha}</CTableDataCell>
                             <CTableDataCell>{mensaje.nombreComprador}</CTableDataCell>
-                            {mensaje.respuesta == "" ? (
+                            {mensaje.respuesta == null ? (
                               <CTableDataCell><CButton color="success" onClick={() => showModalQualify(mensaje.idMensaje)}> Responder</CButton></CTableDataCell>
                             ) : (
                                 <CTableDataCell><CButton color="success" disabled onClick={() => showModalQualify(mensaje.idMensaje)}> Responder</CButton></CTableDataCell>
