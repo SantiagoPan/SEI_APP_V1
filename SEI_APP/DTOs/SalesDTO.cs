@@ -21,7 +21,7 @@ namespace SEI_APP.DTOs
             public string Respuesta { get; set; }
             public string Servicio { get; set; }
             public string Fecha { get; set; }
-            public string NombreComprador { get; set; }
+            public string NombreVendedor { get; set; }
 
         }
     }

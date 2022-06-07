@@ -138,7 +138,7 @@ function Message(props) {
                         <CTableHeaderCell scope="col">Mensaje</CTableHeaderCell>
                         <CTableHeaderCell scope="col">Respuesta</CTableHeaderCell>
                         <CTableHeaderCell scope="col">Fecha Del Mensaje</CTableHeaderCell>
-                        <CTableHeaderCell scope="col">Nombre Del Comprador</CTableHeaderCell>
+                        <CTableHeaderCell scope="col">Nombre Del Coprador</CTableHeaderCell>
                         <CTableHeaderCell scope="col">Acciones</CTableHeaderCell>
                       </CTableRow>
                     </CTableHead>
@@ -151,7 +151,7 @@ function Message(props) {
                             <CTableDataCell>{mensaje.mensaje}</CTableDataCell>
                              <CTableDataCell>{mensaje.respuesta}</CTableDataCell>
                             <CTableDataCell>{mensaje.fecha}</CTableDataCell>
-                            <CTableDataCell>{mensaje.nombreComprador}</CTableDataCell>
+                            <CTableDataCell>{mensaje.nombreVendedor}</CTableDataCell>
                             {mensaje.respuesta == null ? (
                               <CTableDataCell><CButton color="success" onClick={() => showModalQualify(mensaje.idMensaje)}> Responder</CButton></CTableDataCell>
                             ) : (
@@ -198,7 +198,7 @@ function Message(props) {
                         <CTableHeaderCell scope="col">Mensaje</CTableHeaderCell>
                         <CTableHeaderCell scope="col">Respuesta Vendedor</CTableHeaderCell>
                         <CTableHeaderCell scope="col">Fecha Del Mensaje</CTableHeaderCell>
-                        <CTableHeaderCell scope="col">Nombre Del Comprador</CTableHeaderCell>
+                        <CTableHeaderCell scope="col">Nombre Del Vendedor</CTableHeaderCell>
                       </CTableRow>
                     </CTableHead>
                     <CTableBody>
@@ -210,7 +210,7 @@ function Message(props) {
                             <CTableDataCell>{mensaje.mensaje}</CTableDataCell>
                             <CTableDataCell>{mensaje.respuesta}</CTableDataCell>
                             <CTableDataCell>{mensaje.fecha}</CTableDataCell>
-                            <CTableDataCell>{mensaje.nombreComprador}</CTableDataCell>
+                            <CTableDataCell>{mensaje.nombreVendedor}</CTableDataCell>
                           </CTableRow>
                         ))}
                     </CTableBody>

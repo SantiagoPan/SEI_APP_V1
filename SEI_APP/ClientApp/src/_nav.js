@@ -12,6 +12,9 @@ import {
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 
+var infoUser = JSON.parse(localStorage.getItem('myData'));
+const isAdmin = infoUser.isAdmin;
+
 const _nav = [
   {
     component: CNavItem,
@@ -19,6 +22,7 @@ const _nav = [
     to: '/post',
     icon: <CIcon icon={cilLibraryAdd} customClassName="nav-icon" />,
   },
+    
   {
     component: CNavItem,
     name: 'Contratar Servicio',
@@ -61,5 +65,11 @@ const _nav = [
     to: '/MassiveNotification',
     icon: <CIcon icon={cilSend} customClassName="nav-icon" />,
   },]
+console.log("Es administrador = ", isAdmin);
+if (!isAdmin) {
+  _nav.pop();
+  _nav.pop();
+}
+
 
 export default _nav

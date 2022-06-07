@@ -20,10 +20,18 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilSearch, cilLockLocked, cilUser, cilPhone, cilAddressBook, cilBirthdayCake } from '@coreui/icons'
-/*import OfferService from '../services/offerservice/OfferService';*/
 
 
 function post(props) {
+  var infoUser = JSON.parse(localStorage.getItem('myData'));
+  if (infoUser.refesh == 1) {
+    console.log("VA A REFRESCAR________-")
+    infoUser.refesh = 0;
+    const serializedState = JSON.stringify(infoUser);
+    console.log(serializedState);
+    var a = localStorage.setItem('myData', serializedState);
+    window.location.reload(true);
+  }
   const [Offerservices, setUser] = useState({
     titulooferta: '',
     departamento: '',
@@ -53,7 +61,7 @@ function post(props) {
         const user = result.data.token;
         console.log(user);
         if (result.status == 200)
-          window.location.href = '/Dashboard';
+          window.location.href = '#/Dashboard';
         else
           alert('No registrado');
       })
@@ -67,8 +75,6 @@ function post(props) {
       <CContainer className="px-12">
         <CRow xs={{ gutterX: 3}}>
           <CCol>
-     
-                       
             <CCard style={{ width: '30rem' }}>
               <CCardImage orientation="top" src="https://www.lupamarketing.com.ar/wp-content/uploads/2020/07/Digital-Marketing-01.png" />
             <CCardBody>

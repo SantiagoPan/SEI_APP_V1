@@ -180,6 +180,7 @@ namespace SEI_APP.Controllers
                     }
                     response.IdUser = infoUser.Id;
                     response.IsAdmin = infoUser.IsAdmin;
+                    response.Refesh = 1;
                     var respToken = await BuildToken(userData, response);
                     resultLogin.Value = respToken;
                     resultLogin.ContentType = "application/json";

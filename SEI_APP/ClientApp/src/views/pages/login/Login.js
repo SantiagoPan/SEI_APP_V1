@@ -47,16 +47,14 @@ function Login1(props) {
         console.log("result.data ", result.data);
         const serializedState = JSON.stringify(result.data);
         var a = localStorage.setItem('myData', serializedState);
-        console.log("A:", a)
         const user = result.data.token;
-        console.log(user);
 
         if (result.status == 200 && result.data != 'LoginError') {
           if (result.data == "Usuario Inactivo") {
             setMsgError("El usuario se encuentra inactivo, contacte al administrador.");
             setVisible(true);
           } else {
-            window.location.href = '#/Dashboard';
+            window.location.href = '#/post';
           }
         }
         else {
@@ -66,8 +64,6 @@ function Login1(props) {
       })
     
   };
-
-  
 
   const resetPassword = (email, password) => {
     const apiUrl = "https://localhost:44342/users/resetPassword?UserName=" + email + "&Password=" + password;

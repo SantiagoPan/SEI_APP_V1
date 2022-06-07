@@ -275,7 +275,7 @@ namespace SEI_APP.Controllers
                 {
                     foreach (var mensaje in mensajes)
                     {
-                        var userInfo = await contextDB.Users.Where(x => x.Id == mensaje.UsuarioComprador).FirstOrDefaultAsync();
+                        var userInfo = await contextDB.Users.Where(x => x.Id == mensaje.UsuarioVendedor).FirstOrDefaultAsync();
                         var ventaS = await contextDB.VentasServicios.Where(x => x.IdVentasServicios == mensaje.IdVentasServicios).FirstOrDefaultAsync();
                         var msg = new SalesDTO.Mensajes
                         {
@@ -284,7 +284,7 @@ namespace SEI_APP.Controllers
                             Respuesta = await contextDB.MensajesVentaServicio.Where(x => x.IdMensajeRespuesta == mensaje.IdMensajesVentaServicio).Select(x => x.Mensaje).FirstOrDefaultAsync(),
                             Servicio = await contextDB.Servicio.Where(x => x.IdServicio == ventaS.IdServicio).Select(x => x.NombreServicio).FirstOrDefaultAsync(),
                             Fecha = mensaje.FechaCreacion.ToString(),
-                            NombreComprador = userInfo.Name + " " + userInfo.Lastname
+                            NombreVendedor = userInfo.Name + " " + userInfo.Lastname
                         };
                         mensajesServ.Add(msg);
                     }
@@ -331,7 +331,7 @@ namespace SEI_APP.Controllers
                             Respuesta = await contextDB.MensajesVentaServicio.Where(x => x.IdMensajeRespuesta == mensaje.IdMensajesVentaServicio).Select(x => x.Mensaje).FirstOrDefaultAsync(),
                             Servicio = await contextDB.Servicio.Where(x => x.IdServicio == ventaS.IdServicio).Select(x => x.NombreServicio).FirstOrDefaultAsync(),
                             Fecha = mensaje.FechaCreacion.ToString(),
-                            NombreComprador = userInfo.Name + " " + userInfo.Lastname
+                            NombreVendedor = userInfo.Name + " " + userInfo.Lastname
                         };
                         mensajesServ.Add(msg);
                     }
@@ -385,7 +385,7 @@ namespace SEI_APP.Controllers
                     }
                 }
 
-                if (ventasPS.Count != 0)
+                if (ventaProductos.Count != 0)
                 {
                     foreach (var product in ventaProductos)
                     {

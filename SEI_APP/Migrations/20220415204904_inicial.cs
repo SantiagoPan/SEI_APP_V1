@@ -881,8 +881,8 @@ namespace SEI_APP.Migrations
                 FechaCreacion = table.Column<string>(type: "date", nullable: false),
                 UsuarioVendedor = table.Column<DateTime>(type: "nvarchar(max)", nullable: false),
                 UsuarioComprador = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                IdVentasServicios = table.Column<int>(type: "int", nullable: true),
-                IdMensajeRespuesta = table.Column<int>(type: "int", nullable: false),
+                IdVentasServicios = table.Column<int>(type: "int", nullable: false),
+                IdMensajeRespuesta = table.Column<int>(type: "int", nullable: true),
             },
             constraints: table =>
             {

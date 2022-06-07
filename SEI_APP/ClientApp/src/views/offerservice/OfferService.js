@@ -258,7 +258,7 @@ function OfferService1(props) {
               <CCard className="mx-4">
                 <CCardBody className="p-4">
 
-                  <h2>Ofertar servicios</h2>
+                  <h2>Ofertar Servicios</h2>
 
                   <CForm onSubmit={SaveService} className="user">
                     <CAlert color="primary">
