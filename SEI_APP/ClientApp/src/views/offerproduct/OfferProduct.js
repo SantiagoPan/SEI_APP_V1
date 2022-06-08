@@ -196,9 +196,7 @@ function OfferProduct1(props) {
             else
               alert('No registrado');
           })
-
       }).catch(err => console.log(err))
-    debugger;
   };
 
   const onChange = (e) => {
@@ -438,7 +436,7 @@ function OfferProduct1(props) {
                     </CCol>
                   </CRow>
                   <div className="d-grid">
-                    <CButton color="success" type="submit" > Crear Oferta</CButton>
+                    <CButton color="success" type="submit" > Publicar Producto</CButton>
                   </div>
                   <div className="d-grid">
                     <CButton color="primary" className="mt-3"> Cancelar</CButton>

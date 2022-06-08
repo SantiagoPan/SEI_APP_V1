@@ -150,9 +150,7 @@ function HireService1(props) {
                   ) : (
                       <CCardText><strong>Precio: </strong>{item.servicio.costoServicio}</CCardText>
                   )}
-
                 </CRow>
-
                 <CCol md={6}>
                   <CButton type="submit" color="success">Contratar</CButton>
                 </CCol>
@@ -183,7 +181,7 @@ function HireService1(props) {
           {servicesFiltered &&
             servicesFiltered.map((servicio) => (
                 <CCard style={{ width: '22rem' }} key={servicio.servicio.idServicio}>
-                  <CCardImage orientation="top" src={servicio.servicio.imagen} />
+                <CCardImage orientation="top" width="350" height="350" src={servicio.servicio.imagen} />
                   <CCardBody>
                     <CCardTitle>{servicio.servicio.nombreServicio} | <small>{servicio.servicio.localizacion.ciudad}, {servicio.servicio.localizacion.departmento}</small></CCardTitle>
                     <br></br>
@@ -270,7 +268,7 @@ function HireService1(props) {
                   {services &&
                     services.map((servicio) => (
                       <CCard style={{ width: '22rem' }} key={servicio.servicio.idServicio}>
-                        <CCardImage orientation="top" src={servicio.servicio.imagen} />
+                        <CCardImage orientation="top" width="350" height="350" src={servicio.servicio.imagen} />
                         <CCardBody>
                           <CCardTitle>{servicio.servicio.nombreServicio} | <small>{servicio.servicio.localizacion.ciudad}, {servicio.servicio.localizacion.departmento}</small></CCardTitle>
                           <br></br>

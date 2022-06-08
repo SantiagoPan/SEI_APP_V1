@@ -5,8 +5,8 @@ export const logoNegative = [
  width="530.000000pt" height="180.000000pt" viewBox="0 0 507.000000 200.000000"
  preserveAspectRatio="xMidYMid meet">
 
-<g transform="translate(0.000000,146.000000) scale(0.100000,-0.100000)"
-fill="#000000" stroke="none">
+<g transform="translate(0.000000,146.000000) scale(0.106000,-0.106000)"
+fill="#ffffff" stroke="none">
 <path d="M2040 1137 c-19 -10 -25 -20 -25 -47 0 -29 6 -38 43 -63 32 -22 42
 -35 40 -51 -4 -30 -57 -36 -65 -7 -7 29 -33 27 -33 -3 0 -42 83 -50 126 -13
 37 32 27 68 -25 102 -46 29 -53 38 -45 59 8 20 53 21 60 1 9 -23 26 -18 22 8

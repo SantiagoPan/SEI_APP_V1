@@ -361,8 +361,8 @@ function SearchProduct1(props) {
         <div className="row">
           {productsFiltered &&
             productsFiltered.map((producto) => (
-              <CCard style={{ width: '18rem' }} key={producto.producto.idProducto}>
-                <CCardImage orientation="top" src={producto.producto.imagen} />
+              <CCard style={{ width: '22rem' }} key={producto.producto.idProducto}>
+                <CCardImage orientation="top" width="350" height="350" src={producto.producto.imagen} />
                 <CCardBody>
                   <CCardTitle>{producto.producto.nombreProducto} | <small>{producto.producto.caracteristicas.condicion}</small></CCardTitle>
                   <br></br>
@@ -408,8 +408,8 @@ function SearchProduct1(props) {
                 <div className="row">
                 {products &&
                     products.map((producto) => (
-                    <CCard style={{ width: '18rem' }} key={producto.producto.idProducto}>
-                      <CCardImage orientation="top" src={producto.producto.imagen} />
+                    <CCard style={{ width: '22rem' }} key={producto.producto.idProducto}>
+                        <CCardImage orientation="top" width="350" height="350" src={producto.producto.imagen} />
                       <CCardBody>
                           <CCardTitle>{producto.producto.nombreProducto} | <small>{producto.producto.caracteristicas.condicion}</small></CCardTitle>
                         <br></br> 
