@@ -38,7 +38,6 @@ function MySales(props) {
       .get("https://localhost:44342/services/getServicesAndProductsById?idUser=" + infoUser.idUser)
       .then(response => {
         setInfoSales(response.data);
-        console.log(InfoSales);
       })
       .catch((error) => {
         console.log(error);
@@ -59,6 +58,7 @@ function MySales(props) {
                 <h2>Mis Ventas</h2>
               </CCardBody>
               <div className="justify-content-center">
+              <CContainer>
               <CTable bordered>
                 <CTableHead>
                   <CTableRow>
@@ -86,7 +86,8 @@ function MySales(props) {
                     ))}
                 </CTableBody>
               </CTable>
-                </div>
+               </CContainer>
+             </div>
             </CCard>
           </CCol>
         </CRow>

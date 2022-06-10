@@ -20,6 +20,7 @@ import {
   CModalFooter,
   CModalTitle,
   CFormLabel,
+  CAlert,
   CFormInput,
   CFormSelect,
   CInputGroup,
@@ -119,15 +120,16 @@ function Message(props) {
   }, [])
 
   return (
-        <div className="bg-light min-vh-10 d-flex flex-row align-items-center">
+    <div className="bg-light min-vh-10 d-flex flex-row align-items-center">
       <CContainer>
-        <div>
         <CRow className="justify-content-center">
           <CCol md={9} lg={7} xl={12}>
             <CCard className="mx-4">
               <CCardBody className="p-4">
-                <h2>Mensajes De Mis Ventas</h2>
+                <h2>Mensajes</h2>
+                <CAlert color="primary">Mensajes De Mis Ventas</CAlert>
               </CCardBody>
+              <CContainer>
               <div className="justify-content-center">
                 {messagesSales.length == 0 ? (<h4>No tiene Mensajes</h4>) : (
                   <CTable bordered>
@@ -156,14 +158,14 @@ function Message(props) {
                               <CTableDataCell><CButton color="success" onClick={() => showModalQualify(mensaje.idMensaje)}> Responder</CButton></CTableDataCell>
                             ) : (
                                 <CTableDataCell><CButton color="success" disabled onClick={() => showModalQualify(mensaje.idMensaje)}> Responder</CButton></CTableDataCell>
-                            )}
-                            
+                            )}                          
                           </CTableRow>
                         ))}
                     </CTableBody>
                   </CTable>
-                )}
-              </div>
+                  )}
+                </div>
+                </CContainer> 
 
               <CModal visible={visibleQualify} onClose={() => setVisibleQualify(false)}>
                 <CModalHeader onClose={() => setVisibleQualify(false)}>
@@ -185,9 +187,11 @@ function Message(props) {
                 <CModalFooter>
                 </CModalFooter>
               </CModal>
+
               <CCardBody className="p-4">
-                <h2>Mensajes De Mis Compras</h2>
+                <CAlert color="primary">Mensajes De Mis Compras</CAlert>
               </CCardBody>
+              <CContainer>
               <div className="justify-content-center">
                 {messagesBuys.length == 0 ? (<h4>No tiene Mensajes</h4>): (
                   <CTable bordered>
@@ -216,10 +220,12 @@ function Message(props) {
                     </CTableBody>
                   </CTable>
                 )}
-
-                <CCardBody className="p-4">
-                  <h2>Notificaciones Del Administrador</h2>
-                </CCardBody>
+                </div>
+                </CContainer>
+              <CCardBody className="p-4">
+                   <CAlert color="primary">Notificaciones Del Administrador</CAlert>
+              </CCardBody>
+              <CContainer>
                 <div className="justify-content-center">
                   {notifications.length == 0 ? (<h4>No tiense notificaciones</h4>) : (
                     <CTable bordered>
@@ -237,19 +243,16 @@ function Message(props) {
                               <CTableHeaderCell scope="row">{mensaje.idNotificacionMasiva}</CTableHeaderCell>
                               <CTableDataCell>{mensaje.mensaje}</CTableDataCell>
                               <CTableDataCell>{mensaje.fechaMensaje}</CTableDataCell>
-
                             </CTableRow>
                           ))}
                       </CTableBody>
                     </CTable>
-
                   )}
                 </div>
-              </div>
+                </CContainer>
             </CCard>
           </CCol>
         </CRow>
-        </div>
       </CContainer>
     </div>
   )

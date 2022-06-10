@@ -78,6 +78,7 @@ function MassiveNotification(props) {
         <CRow xs={{ gutterX: 6 }}>
           <CCol>
             <CCard style={{ width: '50rem' }}>
+              <CContainer>
               <h4>Enviar Notificación A Los Usuarios</h4>
               <CCardBody>
                 <CForm onSubmit={SendNotification} className="row g-3">
@@ -85,12 +86,13 @@ function MassiveNotification(props) {
                   <CButton color="primary" type="submit">Notificar</CButton>
                   </CForm>
               </CCardBody>
-
+              </CContainer>
               <CCardBody className="p-4">
                 <h4>Notificaciones Del Administrador</h4>
               </CCardBody>
+              <CContainer>
               <div className="justify-content-center">
-                {notifications.length == 0 ? (<h4>No tiense notificaciones</h4>) : (
+                {notifications.length == 0 ? (<h4>No tiene notificaciones</h4>) : (
                   <CTable bordered>
                     <CTableHead>
                       <CTableRow>
@@ -106,13 +108,13 @@ function MassiveNotification(props) {
                             <CTableHeaderCell scope="row">{mensaje.idNotificacionMasiva}</CTableHeaderCell>
                             <CTableDataCell>{mensaje.mensaje}</CTableDataCell>
                             <CTableDataCell>{mensaje.fechaMensaje}</CTableDataCell>
-
                           </CTableRow>
                         ))}
                     </CTableBody>
                   </CTable>
                 )}
-              </div>
+                </div>
+              </CContainer>
             </CCard>
           </CCol>
         </CRow>

@@ -7,6 +7,7 @@ import {
   CContainer,
   CRow,
   CButton,
+  CTooltip,
   CCardImage,
   CCardTitle,
   CFormSelect,
@@ -149,6 +150,17 @@ const MyOrders = () => {
       })
   };
 
+  const handleDownload = (url, filename) => {
+    console.log("url ", url);
+    console.log("filename ", filename);
+    axios
+      .get(url, {
+        responseType: "blob"
+      })
+      .then((res) => {
+        fileDownload(res.data, filename);
+      });
+  };
   const UploadFiles = (e) => {
     var counFiles = image.length;
     var arrNames = [];
@@ -336,6 +348,7 @@ const MyOrders = () => {
             <CModalTitle>Contratar Servicio - {servicio.servicio.nombreServicio} </CModalTitle>
           </CModalHeader>
           <CModalBody>
+            <CContainer>
             <CRow className="mb-3">
               <CAlert color="info">Datos Del Prestador</CAlert>
               <br></br>
@@ -359,7 +372,6 @@ const MyOrders = () => {
                   <CTableHead>
                     <CTableRow>
                       <CTableHeaderCell scope="col">Nombre Del Documento</CTableHeaderCell>
-                      <CTableHeaderCell scope="col">Acciones</CTableHeaderCell>
                     </CTableRow>
                   </CTableHead>
                   <CTableBody>
@@ -367,7 +379,6 @@ const MyOrders = () => {
                       servicio.servicio.adjuntos.map((adjunto) => (
                         <CTableRow>
                           <CTableDataCell>{adjunto}</CTableDataCell>
-                          <CTableDataCell><CIcon icon={cilCloudDownload} /> | <CIcon icon={cilTrash} /></CTableDataCell>
                         </CTableRow>
                       ))}
                   </CTableBody>
@@ -384,14 +395,17 @@ const MyOrders = () => {
                 </CInputGroup>
                 <CButton color="success" onClick={() => SendMessage(servicio.servicio.idVentaServicio)}>Enviar mensaje</CButton>
               </CForm>
-            </CRow>
+              </CRow>
+              </CContainer>
           </CModalBody>
           <CModalFooter>
             <CCol md={4}>
               <CButton color="info" onClose={() => setVisibleHire(false)} onClick={hideModalHire}>Finalizar Servicio</CButton>
             </CCol>
           </CModalFooter>
+          
         </CModal>
+        
       )
     }, this);
 

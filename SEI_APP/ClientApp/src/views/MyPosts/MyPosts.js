@@ -185,9 +185,11 @@ function MyPosts(props) {
               <CCardBody className="p-4">
                 <h2>Mis Publicaciones</h2>
               </CCardBody>
-              <CContainer>
                 <div className="justify-content-center">
-                  <h2>Productos</h2>
+                  <CCardBody className="p-4">
+                    <CAlert color="primary">Productos</CAlert>
+                </CCardBody>
+                <CContainer>
                 <CTable bordered>
                   <CTableHead>
                     <CTableRow>
@@ -222,14 +224,18 @@ function MyPosts(props) {
                         </CTableRow>
                         ))}
                   </CTableBody>
-                </CTable>
+                  </CTable>
+                  </CContainer>
                 </div>
                 <div>
                   {modalInfoProduct}
                 </div>
                 <br></br>
                 <div className="justify-content-center">
-                  <h2>Servicios</h2>
+                  <CCardBody className="p-4">
+                    <CAlert color="primary">Servicios</CAlert>
+                  </CCardBody>
+                  <CContainer>
                   <CTable bordered>
                     <CTableHead>
                       <CTableRow>
@@ -267,12 +273,12 @@ function MyPosts(props) {
                           </CTableRow>
                         ))}
                     </CTableBody>
-                  </CTable>
+                    </CTable>
+                   </CContainer>
                 </div>
                 <div>
                   {modalInfoService}
                 </div>
-                </CContainer>
             </CCard>
           </CCol>
         </CRow>

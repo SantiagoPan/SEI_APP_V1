@@ -261,9 +261,7 @@ function OfferService1(props) {
                   <h2>Ofertar Servicios</h2>
 
                   <CForm onSubmit={SaveService} className="user">
-                    <CAlert color="primary">
-                      Información General
-                    </CAlert>
+                    <CAlert color="primary">Información General</CAlert>
 
                     <strong>Nombre Del Servicio:</strong>
                     <CInputGroup className="mb-3">
@@ -400,17 +398,12 @@ function OfferService1(props) {
                     <div className="d-grid">
                       <CButton color="primary" className="mt-3"> Cancelar</CButton>
                     </div>
-
-
                   </CForm>
-
                 </CCardBody>
               </CCard>
             </CCol>
           </CRow>
-
         </CContainer>
-
       </div>
     )
   }

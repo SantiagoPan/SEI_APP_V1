@@ -169,19 +169,23 @@ function HireService1(props) {
       document.getElementsByClassName('allServices')[0].style.visibility = 'hidden';
       setServicesFiltered(servicesFilter);
     } else {
-      document.getElementsByClassName('allServices')[0].style.visibility = 'visible';
-      console.log("Sin resultados en la busqueda");
+      window.location.reload(true);
+      //document.getElementsByClassName('allServices')[0].style.visibility = 'visible';
+      //setServicesFiltered();
+      //setServicesFiltered(services);
+      //console.log("Sin resultados en la busqueda");
     }
   };
 
   let servicesFilter = servicesFiltered.length > 0
     && servicesFiltered.map((item, i) => {
+      console.log(servicesFiltered);
       return (
           <div className="row">
           {servicesFiltered &&
             servicesFiltered.map((servicio) => (
                 <CCard style={{ width: '22rem' }} key={servicio.servicio.idServicio}>
-                <CCardImage orientation="top" width="350" height="350" src={servicio.servicio.imagen} />
+                  <CCardImage orientation="top" src={servicio.servicio.imagen} />
                   <CCardBody>
                     <CCardTitle>{servicio.servicio.nombreServicio} | <small>{servicio.servicio.localizacion.ciudad}, {servicio.servicio.localizacion.departmento}</small></CCardTitle>
                     <br></br>
@@ -268,7 +272,7 @@ function HireService1(props) {
                   {services &&
                     services.map((servicio) => (
                       <CCard style={{ width: '22rem' }} key={servicio.servicio.idServicio}>
-                        <CCardImage orientation="top" width="350" height="350" src={servicio.servicio.imagen} />
+                        <CCardImage orientation="top" src={servicio.servicio.imagen} />
                         <CCardBody>
                           <CCardTitle>{servicio.servicio.nombreServicio} | <small>{servicio.servicio.localizacion.ciudad}, {servicio.servicio.localizacion.departmento}</small></CCardTitle>
                           <br></br>
