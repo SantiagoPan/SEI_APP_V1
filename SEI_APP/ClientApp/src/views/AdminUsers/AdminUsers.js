@@ -66,9 +66,8 @@ function AdminUsers(props) {
   const updateData = (e) => {
     const apiUrl = "https://localhost:44342/users/updateInfoUser";
     e.preventDefault();
-    var infoUser = JSON.parse(localStorage.getItem('myData'));
     const data = {
-      idUser: infoUser.idUser,
+      idUser: userInfo[0].user.idUser,
       firstname: userInfo[0].user.firstName,
       lastname: userInfo[0].user.lastname,
       username: userInfo[0].user.username,
@@ -80,7 +79,6 @@ function AdminUsers(props) {
       email: userInfo[0].user.email,
       password: userInfo[0].user.password,
     };
-    console.log(data);
     axios.post(apiUrl, data)
       .then((result) => {
         console.log(result.data);
@@ -92,7 +90,7 @@ function AdminUsers(props) {
         if (result.status == 200)
           window.location.reload(true);
         else
-          alert('No registrado');
+          alert('No Actualizado');
       })
   };
 
@@ -161,6 +159,8 @@ function AdminUsers(props) {
             <CCardBody className="p-4">
               <CForm onSubmit={updateData} className="user">
                 <h2>Mis Datos</h2>
+
+                <CFormInput type="hidden" value={dataUser.idUser = item.user.idUser} className="form-control form-control-sm" name="IdProducto" id="IdProducto" />
                 <CInputGroup className="mb-3">
                   <CInputGroupText>
                     <CIcon icon={cilUser} />
